@@ -17,6 +17,8 @@ rpoiscor <- function(x, rho){
   return(b)
 } 
 
+# runif only works coming from uniform data
+# modified from Eric Neuwirth here http://r.789695.n4.nabble.com/Generating-uniformly-distributed-correlated-data-td3314905.html
 
 runifcor.cor <- function(x, rho){
   hw <- function(r){ 
@@ -27,9 +29,21 @@ runifcor.cor <- function(x, rho){
   return(y)
 }
 
-# only works coming from uniform data
 
 
 
-"unif", 
-"weibull", "gamma"
+rweibullcor <- function(x, rho) {
+  y <- sapply(x, rnormcor, rho=rho)
+  y2 <- pnorm(y)
+#   y2[y2==0] <- .001
+#   y2[y2<0] <- .001
+#   y2[y2>1] <- 1
+  fit <- fitdistr(y2, densfun="weibull")
+  y3 <- sapply(y2, qweibull, shape=fit$estimate[[1]], scale=fit$estimate[[2]])
+}
+
+
+
+rgammacor <- function(x, rho)
+
+"gamma"

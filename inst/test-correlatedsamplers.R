@@ -103,3 +103,33 @@ test_that("Result is uniformly distributed", {
   
 })
 
+context("Weibull")
+
+library(MASS)
+RHO1 <- 0.7
+RHO2 <- -0.7
+RHO3 <- 0.05
+a <- rnorm(1000)
+b <- rweibullcor(x, RHO1)
+c <- rweibullcor(x, RHO2)
+d <- rweibullcor(x, RHO3)
+
+
+test_that("Correlation is correct", {
+  expect_equivalent(cor(a,b), RHO1)
+  expect_equivalent(cor(a,c), RHO2)
+  expect_equivalent(cor(a,d), RHO3)
+  
+})
+
+
+test_that("Direction is correct", {
+  expect_equal(sign(cor(a,b)), sign(RHO1))
+  expect_equal(sign(cor(a,c)), sign(RHO2))
+  expect_equal(sign(cor(a,d)), sign(RHO3))
+})
+
+test_that("Result is uniformly distributed", {
+  #expect_equivalent(mean(b), sd(b))
+  
+})
