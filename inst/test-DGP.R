@@ -1,9 +1,5 @@
-library(testthat)
-
-
-gdf <- genNumeric(8000, 50, rho=0.45)
-
-gdf <- as.data.frame(gdf)
+################################################################################
+# Test data generating process
 
 
 
