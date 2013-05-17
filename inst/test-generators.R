@@ -31,22 +31,36 @@ for(i in 2:ncol(covmat)){
 tol <- RHO1 * K * .005
 err <- sum(abs(covE - RHO1)) / K
 
-test_that("Covariances are correct", {
+test_that("Correlations are correct", {
   expect_that(err, is_less_than(tol))
 })
 
 
 
+context("User Controlled Random Correlation Matrices")
 
 
-
-pattern <- list(dist = c("norm", "binom", "chisq", "pois", "unif", 
+struc <- list(dist = c("norm", "binom", "chisq", "pois", "unif", 
                          "weibull", "gamma"), 
-                center = c(100, 0, 2, 4, 9, 2, 12), 
-                spread = c(3, 5, 2, 9, 4, 7, 3), 
                 rho = c(-.05, -.4, 0.3, 0.9, .03, -.6, -.2))
 
 
-N <- 1000
+N <- 5000
 
-cov <- matrix(nrow = 1000, ncol = length(pattern$dist))
+covmat <- genNumeric(N, pattern=struc)
+
+test_that("Dimensions are correct", {
+  expect_equal(nrow(covmat), N)
+  expect_equal(ncol(covmat), length(struc$dist))
+  expect_is(covmat, "matrix")
+  
+})
+
+err <- sum(abs(cor(covmat)[2:ncol(covmat),1] - struc$rho[2:length(struc$rho)])) / length(struc$rho)
+tol <- sum(abs(struc$rho[2:length(struc$rho)]) *.05)
+
+test_that("Correlations are correct", {
+  expect_that(err, is_less_than(tol))
+})
+
+
