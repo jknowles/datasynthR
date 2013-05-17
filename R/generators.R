@@ -34,7 +34,7 @@ genBinomiaDV <- function(df, form, errors, intercept){
   # if form = NULL
   exp <- paste0(form$coefs, "*","gdf$", form$vars, collapse="+")
   form$exp <- parse(text=exp)
-  z <- intercept + eval(form$exp) + rnorm(dim(gdf)[1])
+  z <- intercept + eval(form$exp) + runif(dim(gdf)[1])
   pr <- 1/(1+exp(-z))
   y = rbinom(dim(gdf)[1], 1, pr)
   return(y)
