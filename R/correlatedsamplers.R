@@ -3,6 +3,9 @@
 #
 #################################################################################
 
+# consider adding shape modifiers 
+# Noise function as well
+
 rnormcor <- function(x,rho) rnorm(1, rho*x, sqrt(1-rho^2))
 
 rchisqcor <- function(x, rho){
@@ -33,17 +36,37 @@ runifcor.cor <- function(x, rho){
 
 
 rweibullcor <- function(x, rho) {
+  require(MASS)
   y <- sapply(x, rnormcor, rho=rho)
   y2 <- pnorm(y)
-#   y2[y2==0] <- .001
-#   y2[y2<0] <- .001
-#   y2[y2>1] <- 1
   fit <- fitdistr(y2, densfun="weibull")
   y3 <- sapply(y2, qweibull, shape=fit$estimate[[1]], scale=fit$estimate[[2]])
 }
 
 
 
-rgammacor <- function(x, rho)
+rgammacor <- function(x, rho){
+  require(MASS)
+  y <- sapply(x, rnormcor, rho=rho)
+  y2 <- pnorm(y)
+  fit <- fitdistr(y2, densfun="gamma")
+  y3 <- sapply(y2, qweibull, shape=fit$estimate[[1]], scale=fit$estimate[[2]])
+}
 
-"gamma"
+
+rbinomcor <- function(x, rho){
+  
+}
+
+
+a <- rnorm(1000)
+b <- sapply(a, rnormcor, rho=0.7)
+y2 <- pnorm(b)
+fit <- fitdistr(y2, densfun="gamma")
+y3 <- sapply(y2, qgamma, shape=fit$estimate[[1]], rate=fit$estimate[[2]])
+
+
+cor(a, y3)
+qplot(a, y3)
+qplot(a, b)
+
