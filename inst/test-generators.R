@@ -63,4 +63,18 @@ test_that("Correlations are correct", {
   expect_that(err, is_less_than(tol))
 })
 
+context("Speed")
 
+
+N <- 98756
+K <- 25
+P <- 0.43278456
+RHO2 <- -0.24
+covmat <- genNumeric(N, K, rho=RHO1)
+
+test_that("Function executes in reasonable length of time...", {
+  expect_that(genNumeric(1000, 25, rho=0.3), takes_less_than(0.5))
+  expect_that(genNumeric(500, 40, rho=0.3), takes_less_than(0.5))
+  expect_that(genNumeric(87953, 8, rho=0.3), takes_less_than(0.5))
+  expect_that(genNumeric(87953, 80, rho=0.3), takes_less_than(1))
+})

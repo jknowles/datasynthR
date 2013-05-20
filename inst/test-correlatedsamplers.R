@@ -114,9 +114,9 @@ RHO1 <- 0.7
 RHO2 <- -0.7
 RHO3 <- 0.05
 a <- rnorm(1000)
-b <- rweibullcor(x, RHO1)
-c <- rweibullcor(x, RHO2)
-d <- rweibullcor(x, RHO3)
+b <- rweibullcor(a, RHO1)
+c <- rweibullcor(a, RHO2)
+d <- rweibullcor(a, RHO3)
 
 
 test_that("Correlation is correct", {
@@ -145,9 +145,9 @@ RHO1 <- 0.7
 RHO2 <- -0.7
 RHO3 <- 0.05
 a <- rnorm(1000)
-b <- rgammacor(x, RHO1)
-c <- rgammacor(x, RHO2)
-d <- rgammacor(x, RHO3)
+b <- rgammacor(a, RHO1)
+c <- rgammacor(a, RHO2)
+d <- rgammacor(a, RHO3)
 
 
 test_that("Correlation is correct", {
@@ -176,9 +176,9 @@ RHO1 <- 0.7
 RHO2 <- -0.7
 RHO3 <- 0.05
 a <- rnorm(1000)
-b <- rbinomcor(x, RHO1)
-c <- rbinomcor(x, RHO2)
-d <- rbinomcor(x, RHO3)
+b <- rbinomcor(a, RHO1)
+c <- rbinomcor(a, RHO2)
+d <- rbinomcor(a, RHO3)
 
 # cor1 <- glm(b ~ a, family="binomial")
 # cor2 <- glm(c ~ 0 + a, family="binomial")
