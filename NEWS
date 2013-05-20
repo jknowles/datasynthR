@@ -1,0 +1,8 @@
+datasynthR 0.1
+-------------------
+
+* functions for building numeric correlated data of user specified distribution and bivariate association
+
+* generate associated ordinal data as well
+
+* unit tests for all functions in place
