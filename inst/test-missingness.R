@@ -120,16 +120,16 @@ test_that("Function returns the correct dimensions answers", {
 test_that("Function is fast!", {
   expect_that(dimNA(covmat2), takes_less_than(.1))
 })
-
-context("MAR data")
-
-
-N <- 5000
-K <- 25
-P <- 0.43278456
-RHO2 <- -0.24
-covmat <- genNumeric(N, K, rho=RHO2)
-
-
-covmat2 <- MAR(covmat, 1)
+# 
+# context("MAR data")
+# 
+# 
+# N <- 5000
+# K <- 25
+# P <- 0.43278456
+# RHO2 <- -0.24
+# covmat <- genNumeric(N, K, rho=RHO2)
+# 
+# 
+# covmat2 <- MAR(covmat, 1)
 

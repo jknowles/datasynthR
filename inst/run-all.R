@@ -3,6 +3,7 @@ source("inst/test-pkgs.R")
 source("R/correlatedsamplers.R")
 source("R/generators.R")
 source("R/missingness.R")
+source("R/helpers.R")
 
 test_file("inst/test-generators.R")
 test_file("inst/test-genFactor.R")

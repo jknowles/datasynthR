@@ -2,7 +2,7 @@
 ##'
 
 
-genNumeric <- function(n, k, names, rho, pattern){
+genNumeric <- function(n, k, rho, pattern){
   if(missing(pattern)){
   cov <- array(runif(n*k, -2, 2), dim=c(n, k))
    for(i in 2:k){
@@ -25,8 +25,13 @@ genNumeric <- function(n, k, names, rho, pattern){
                           weibull= rweibullcor(cov[, 1], rho=pattern$rho[i]), 
                           gamma = rgammacor(cov[, 1], rho=pattern$rho[i]))
     }
+    if(!is.null(pattern$names)){
+      cov <- as.data.frame(cov)
+      names(cov) <- pattern$names
+      return(cov)
+    }
+    return(as.data.frame(cov))
   }
-  return(cov)
 }
 
  
@@ -40,9 +45,9 @@ genBinomiaDV <- function(df, form, errors, intercept){
   return(y)
 }
 
-
-genFactor <- function(n, k, names, nlevel, rho, ...){
-  cov <- genNumeric(n, k, names, rho)
+# Unordered factors
+genFactor <- function(n, k, nlevel, rho, ...){
+  cov <- genNumeric(n, k, rho)
   cov <- as.data.frame(cov)
   for(i in 1:ncol(cov)){
     cov[, i] <- cut(cov[, i], breaks=nlevel)
