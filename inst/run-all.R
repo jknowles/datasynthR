@@ -6,6 +6,5 @@ source("R/missingness.R")
 source("R/helpers.R")
 
 test_file("inst/test-generators.R")
-test_file("inst/test-genFactor.R")
 test_file("inst/test-correlatedsamplers.R")
 test_file("inst/test-missingness.R")

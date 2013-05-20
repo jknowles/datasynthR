@@ -69,7 +69,7 @@ struc2 <- list(dist = c("norm", "binom", "chisq", "pois", "unif",
 
 covmat <- genNumeric(N, pattern=struc2)
 
-test_that("Names get passed properly," {
+test_that("Names get passed properly", {
   expect_equivalent(names(covmat), struc2$names)
   expect_is(covmat, "data.frame")
   
@@ -84,7 +84,7 @@ P <- 0.43278456
 RHO2 <- -0.24
 covmat <- genNumeric(N, K, rho=RHO1)
 
-test_that("Function executes in reasonable length of time...", {
+test_that("Function executes in reasonable length of time", {
   expect_that(genNumeric(1000, 25, rho=0.3), takes_less_than(0.5))
   expect_that(genNumeric(500, 40, rho=0.3), takes_less_than(0.5))
   expect_that(genNumeric(87953, 8, rho=0.3), takes_less_than(0.5))
