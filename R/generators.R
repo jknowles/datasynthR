@@ -64,9 +64,10 @@ genNumeric <- function(n, k, rho, seed, pattern){
   }
   } else if(!missing(seed)){
     if(missing(pattern)){
+      if(length(seed) != n) stop("Constant seed produces nonsense correlations.")
       cov <- array(runif(n*k, -2, 2), dim=c(n, k))
       cov <- cbind(seed, cov)
-      for(i in 2:k+1){
+      for(i in 1:k+1){
         cov[, i] <- sapply(cov[, 1], rnormcor, rho=rho)
       }
       return(cov)
@@ -151,7 +152,7 @@ genBinomialDV <- function(df, form, errors, intercept){
 ##' dat2 <- genFactor(50, 10, nlevel=6, rho=0.2)
 ##' gammaGK(dat2[, 1], dat2[, 2])
 genFactor <- function(n, k, nlevel, rho, ...){
-  cov <- genNumeric(n, k, rho)
+  cov <- genNumeric(n, k, rho, ...)
   cov <- as.data.frame(cov)
   for(i in 1:ncol(cov)){
     cov[, i] <- cut(cov[, i], breaks=nlevel)

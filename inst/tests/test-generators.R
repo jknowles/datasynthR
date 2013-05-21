@@ -80,7 +80,7 @@ context("User specified Seed is Correct")
 N <- 1000
 K <- 6
 RHO1 <- 0.3
-
+RHO2 <- -0.9
 S1 <- rnorm(N)
 S2 <- runif(N)
 
@@ -92,13 +92,34 @@ struc3 <- list(dist = c("norm", "binom", "chisq", "pois", "unif",
                seed = c(runif(N), rnorm(N), rpois(N, 7), rpois(N, 3), rgamma(N, shape=2), 
                         runif(N)))
 
-covmat <- genNumeric(N, pattern=struc3)
+
 
 covmat <- genNumeric(N, K, rho=RHO1, seed=S1)
-covmat2 <- genNumeric(N, K, rho=RHO1, seed=S2)
+covmat2 <- genNumeric(N, K, rho=RHO2, seed=S2)
+covmat3 <- genNumeric(N, pattern = struc3)
+
+err1 <- cor(covmat)[2:K, 1]
+tol1 <- abs(sum(err1 - RHO1)) / K
+
+
+err2 <- cor(covmat2)[2:K, 1]
+tol2 <- abs(sum(err2 - RHO2)) / K
+
 test_that("Function appropriately switches between fixed and variable seed",{
-  
+  expect_error(genNumeric(N, K, rho=-0.5, seed=3))
+  expect_error(genNumeric(N, K, rho=0.3, seed=rep(7, 10)))
+  expect_error(genNumeric(N, K, rho=0.3, seed=rep(7, N+10)))
+  expect_error(genNumeric(N, K, rho=0.3, seed=cbind(rep(7, N+10), rep(7, N+10))))
+  expect_error(genNumeric(N, K, rho=0.3, seed=cbind(rep(7, N), rep(7, N))))
 })
+
+test_that("Function gets the right answer!", {
+  expect_identical(covmat[, 1], S1)
+  expect_identical(covmat2[, 1], S2)
+  expect_that(tol1, is_less_than(0.05))
+  expect_that(tol2, is_less_than(0.1))
+})
+
 
 context("Speed")
 
@@ -171,6 +192,14 @@ test2 <- abs(round(gMAT[,1], digits=3) - RHO1) > tol
 test_that("Bivariate relationships exist and magnitude is correct", {
   expect_equivalent(length(chiSQ), table(chiSQ)["TRUE"])
   expect_that(table(test2)["TRUE"][[1]], is_more_than(round(.9*length(test2))))
+})
+
+context("User specified seed works")
+
+
+
+test_that("User specified seed can work", {
+  
 })
 
 context("Speed tests")
