@@ -22,3 +22,24 @@ cor(studat[, 1], studat[, 5])
 cor(studat[, 1], studat[, 6])
 cor(studat[, 1], studat[, 7])
 cor(studat[, 1], studat[, 8])
+
+myF <- list(vars=c("test1", "test2", "daysattended", "daysOUT", "bad"), 
+                coefs=c(4, -2, 1.2, -7, 2))
+
+studat$out <- genBinomialDV(studat, form=myF, intercept=7)
+
+testGLM <- glm(out ~ test1 + test2 + daysattended + daysOUT, data=studat, 
+               family="binomial")
+
+summary(testGLM)
+
+testGLM2 <- glm(out ~ test1 + test2 + daysattended + daysOUT + bad, data=studat, 
+               family="binomial")
+
+summary(testGLM2)
+
+##################
+# What about factor variables?
+
+  
+  

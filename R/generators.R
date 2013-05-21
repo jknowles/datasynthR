@@ -64,14 +64,14 @@ genNumeric <- function(n, k, rho, pattern){
 
 ##' Generate a binomial dependent variable
 ##'
-
-genBinomiaDV <- function(df, form, errors, intercept){
+# need some flexibility to norm the resulting coefficients to avoid all 1 and 0s
+genBinomialDV <- function(df, form, errors, intercept){
   # if form = NULL
-  exp <- paste0(form$coefs, "*","gdf$", form$vars, collapse="+")
+  exp <- paste0(form$coefs, "*","df$", form$vars, collapse="+")
   form$exp <- parse(text=exp)
-  z <- intercept + eval(form$exp) + runif(dim(gdf)[1])
+  z <- intercept + eval(form$exp) + runif(dim(df)[1])
   pr <- 1/(1+exp(-z))
-  y = rbinom(dim(gdf)[1], 1, pr)
+  y = rbinom(dim(df)[1], 1, pr)
   return(y)
 }
 
