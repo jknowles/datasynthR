@@ -8,6 +8,7 @@
 ## simon jackman
 ## department of political science
 ## stanford university
+## From: http://jackman.stanford.edu/classes/151B/06/class0517.r
 ##########################################################
 gammaGK <- function(x,y=NULL, print=FALSE){
   concordant <- function(x){ 

@@ -8,6 +8,11 @@
 
 rnormcor <- function(x,rho) rnorm(1, rho*x, sqrt(1-rho^2))
 
+rnormcorV <- function(x, rho){
+  tmp <- sapply(x, rnormcor, rho=rho)
+  return(tmp)
+}
+
 rchisqcor <- function(x, rho){
   sign(rho)*sign(x)*sum(rep(sapply(x, rnormcor, rho=rho), times=length(x))^2)
 }
