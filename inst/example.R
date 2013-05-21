@@ -68,7 +68,7 @@ struc <- list(dist=c("norm", "norm", "unif", "pois", "pois", "gamma",
               seed = cbind(seeds[,1], seeds[,2], seeds[,3], seeds[, 4], seeds[, 5], 
                        seeds[, 6], seeds[,1]))
 
-dat <- genNumeric(1000, seed=TRUE, pattern=struc)
+dat <- genNumeric(1000, pattern=struc)
 
 cor(seeds[,1], dat[,1])
 cor(seeds[,2], dat[,2])
@@ -77,4 +77,12 @@ cor(seeds[,4], dat[,4])
 cor(seeds[,5], dat[,5])
 cor(seeds[,6], dat[,6])
 cor(seeds[,1], dat[,7])
-  
+
+dat1 <- genFactor(1000, 3, nlevel=3, rho=0.8)
+
+dat2 <- genFactor(1000, 4, nlevel=4, rho=0.3, seed=dat[,6])
+dat3 <- genFactor(1000, 4, nlevel=6, rho=-0.7, seed=dat2[,4])
+rm(dat3)
+
+identical(dat2[,4], dat3[,1])
+

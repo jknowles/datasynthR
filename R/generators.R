@@ -164,17 +164,22 @@ genFactor <- function(n, k, nlevel, rho, seed, ...){
   if(!missing(seed)){
     if(class(seed)=="numeric"){
     cov <- genNumeric(n, k, rho, seed)
-    } else if(class(seed)!="numeric"){
-      seed <- as.numeric(as.factor(seed))
-      cov <- genNumeric(n, k, rho, seed)
-    }
     cov <- as.data.frame(cov)
     for(i in 1:ncol(cov)){
       cov[, i] <- cut(cov[, i], breaks=nlevel)
       cov[, i] <- factor(cov[, i], labels=sample(letters, nlevel))
     }
+    } else if(class(seed)!="numeric"){
+      seed.tmp <- as.numeric(as.factor(seed))
+      cov <- genNumeric(n, k, rho, seed.tmp)
+      cov <- as.data.frame(cov)
+      cov[, 1] <- seed
+      for(i in 2:ncol(cov)){
+        cov[, i] <- cut(cov[, i], breaks=nlevel)
+        cov[, i] <- factor(cov[, i], labels=sample(letters, nlevel))
+      }
+    }
     return(as.data.frame(cov))
-      
   }
 }
   
