@@ -53,6 +53,9 @@ testGLM3 <- glm(out ~ test1 + test2 + daysattended + daysOUT + bad + econ +
 
 summary(testGLM3)
 
+######################
+# Chain together with factor variables
+
 
   
   

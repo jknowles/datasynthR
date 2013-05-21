@@ -151,7 +151,8 @@ genBinomialDV <- function(df, form, errors, intercept){
 ##' # low n deviates further from rho
 ##' dat2 <- genFactor(50, 10, nlevel=6, rho=0.2)
 ##' gammaGK(dat2[, 1], dat2[, 2])
-genFactor <- function(n, k, nlevel, rho, ...){
+genFactor <- function(n, k, nlevel, rho, seed, ...){
+  if(missing(seed)){
   cov <- genNumeric(n, k, rho, ...)
   cov <- as.data.frame(cov)
   for(i in 1:ncol(cov)){
@@ -159,5 +160,21 @@ genFactor <- function(n, k, nlevel, rho, ...){
     cov[, i] <- factor(cov[, i], labels=sample(letters, nlevel))
   }
   return(as.data.frame(cov))
+  }
+  if(!missing(seed)){
+    if(class(seed)=="numeric"){
+    cov <- genNumeric(n, k, rho, seed)
+    } else if(class(seed)!="numeric"){
+      seed <- as.numeric(as.factor(seed))
+      cov <- genNumeric(n, k, rho, seed)
+    }
+    cov <- as.data.frame(cov)
+    for(i in 1:ncol(cov)){
+      cov[, i] <- cut(cov[, i], breaks=nlevel)
+      cov[, i] <- factor(cov[, i], labels=sample(letters, nlevel))
+    }
+    return(as.data.frame(cov))
+      
+  }
 }
   

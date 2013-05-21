@@ -151,7 +151,7 @@ test_that("genFactor outputs data in expected size and shape", {
   expect_is(test, "data.frame")
   expect_equal(nrow(test), N)
   expect_equal(ncol(test), K)
-  expect_equal(length(table(test[1])), NLEVEL)
+  expect_equal(length(table(test[1])), LEVS)
 })
 
 
@@ -209,5 +209,55 @@ test_that("Function is not slow", {
 })
 
 context("Generate user specified correlated factors")
+
+N <- 5000
+K <- 4
+LEVS <- 4
+RHO1 <- -0.2
+
+S1 <- sample(letters[1:5], N, replace=TRUE)
+S2 <- rnorm(N)
+test <- genFactor(N, K, nlevel=LEVS, rho=RHO1, seed=S2)
+
+test2 <- genFactor(N, K, nlevel=LEVS, rho=RHO1, seed=S1)
+
+tol <- 0.1
+
+test_that("Correlations are reasonable", {
+  expect_that(abs(gammaGK(test[,1], test[,5])$gamma - RHO1), is_less_than(tol))
+  expect_that(abs(gammaGK(test[,1], test[,2])$gamma - RHO1), is_less_than(tol))
+  expect_that(abs(gammaGK(test[,1], test[,3])$gamma - RHO1), is_less_than(tol))
+  expect_that(abs(gammaGK(test[,1], test[,4])$gamma - RHO1), is_less_than(tol))
+  expect_that(abs(gammaGK(test2[,1], test2[,5])$gamma - RHO1), is_less_than(tol))
+  expect_that(abs(gammaGK(test2[,1], test2[,2])$gamma - RHO1), is_less_than(tol))
+  expect_that(abs(gammaGK(test2[,1], test2[,3])$gamma - RHO1), is_less_than(tol))
+  expect_that(abs(gammaGK(test2[,1], test2[,4])$gamma - RHO1), is_less_than(tol))
+})
+
+N <- 5000
+K <- 4
+LEVS <- 4
+RHO1 <- -0.9
+RHO2 <- 0.99
+
+S1 <- sample(letters[1:5], N, replace=TRUE)
+S2 <- rnorm(N)
+test <- genFactor(N, K, nlevel=LEVS, rho=RHO1, seed=S2)
+
+test2 <- genFactor(N, K, nlevel=LEVS, rho=RHO2, seed=S1)
+
+test_that("Test extreme values of RHO", {
+  expect_that(abs(gammaGK(test[,1], test[,5])$gamma - RHO1), is_less_than(tol))
+  expect_that(abs(gammaGK(test[,1], test[,2])$gamma - RHO1), is_less_than(tol))
+  expect_that(abs(gammaGK(test[,1], test[,3])$gamma - RHO1), is_less_than(tol))
+  expect_that(abs(gammaGK(test[,1], test[,4])$gamma - RHO1), is_less_than(tol))
+  expect_that(abs(gammaGK(test2[,1], test2[,5])$gamma - RHO2), is_less_than(tol))
+  expect_that(abs(gammaGK(test2[,1], test2[,2])$gamma - RHO2), is_less_than(tol))
+  expect_that(abs(gammaGK(test2[,1], test2[,3])$gamma - RHO2), is_less_than(tol))
+  expect_that(abs(gammaGK(test2[,1], test2[,4])$gamma - RHO2), is_less_than(tol))
+})
+
+
+gammaGK(test2[,1], test2[,2])
 
 
