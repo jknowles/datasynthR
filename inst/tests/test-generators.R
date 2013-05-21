@@ -75,6 +75,31 @@ test_that("Names get passed properly", {
   
 })
 
+context("User specified Seed is Correct")
+
+N <- 1000
+K <- 6
+RHO1 <- 0.3
+
+S1 <- rnorm(N)
+S2 <- runif(N)
+
+struc3 <- list(dist = c("norm", "binom", "chisq", "pois", "unif", 
+                        "weibull", "gamma"), 
+               rho = c(-.05, -.4, 0.3, 0.9, .03, -.6, -.2),
+               names = c("score", "accept", "score2", "days", "days2", 
+                         "luck", "time"),
+               seed = c(runif(N), rnorm(N), rpois(N, 7), rpois(N, 3), rgamma(N, shape=2), 
+                        runif(N)))
+
+covmat <- genNumeric(N, pattern=struc3)
+
+covmat <- genNumeric(N, K, rho=RHO1, seed=S1)
+covmat2 <- genNumeric(N, K, rho=RHO1, seed=S2)
+test_that("Function appropriately switches between fixed and variable seed",{
+  
+})
+
 context("Speed")
 
 

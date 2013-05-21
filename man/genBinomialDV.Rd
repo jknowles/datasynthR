@@ -1,0 +1,42 @@
+\name{genBinomialDV}
+\alias{genBinomialDV}
+\title{Generate a binomial dependent variable}
+\usage{
+  genBinomialDV(df, form, errors, intercept)
+}
+\arguments{
+  \item{df}{dataframe to generate the dependent variable
+  from}
+
+  \item{form}{A named list containing the variables in df
+  to be used to calculate the binomial probability, and
+  coefficients of those variables}
+
+  \item{errors}{The way the error structure of the DGP
+  formula should be established}
+
+  \item{intercept}{An adjustment to the base probability}
+}
+\value{
+  A binomial vector by a formula generated out of the
+  elements of form
+}
+\description{
+  Allow the user to specify a formula for generating a
+  binomial dependent variable
+}
+\details{
+  yadda yadaa yadda
+}
+\note{
+  Yadda yadda yadda
+
+  Currently it can be easy for the user to build a
+  formulate that results in all 0 or 1 results. Use
+  intercept to adjust accordingly. Additionally,
+  coefficient scaes don't make sense at the moment.
+}
+\author{
+  Jared E. Knowles
+}
+

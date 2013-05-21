@@ -41,5 +41,18 @@ summary(testGLM2)
 ##################
 # What about factor variables?
 
+myFactors <- genFactor(25000, 6, nlevel=4, rho=0.3)
+names(myFactors) <- c("econ", "race", "sped", "ell", "retention", "other")
+studat <- cbind(studat, myFactors)
+rm(myFactors)
+
+testGLM3 <- glm(out ~ test1 + test2 + daysattended + daysOUT + bad + econ + 
+                  race + sped + ell + retention + other, 
+                data=studat, 
+                family="binomial")
+
+summary(testGLM3)
+
+
   
   

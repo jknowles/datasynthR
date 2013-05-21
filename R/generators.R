@@ -6,6 +6,7 @@
 ##' @param k Number of columns to be generated
 ##' @param rho Correlation coefficient between pairs of variables
 ##' @param pattern List of attributes for columns of data in the data frame created
+##' @param seed A vector of numerics length n to be used to generate correlations for other variabes from
 ##' @return An R data frame of n rows and k columns with distributions specified in \code{\link{pattern}}.
 ##' If pattern is not specified then variables are normally distributed with sequential bivariate correlations
 ##' equal to rho. 
@@ -30,7 +31,8 @@
 ##' dat2 <- genNumeric(1000, pattern=struc)
 ##' cor(dat2[, 1], dat2[, 2])
 ##' cor(dat2[, 1], dat2[, 3])
-genNumeric <- function(n, k, rho, pattern){
+genNumeric <- function(n, k, rho, seed, pattern){
+  if(missing(seed)){
   if(missing(pattern)){
   cov <- array(runif(n*k, -2, 2), dim=c(n, k))
    for(i in 2:k){
@@ -60,11 +62,57 @@ genNumeric <- function(n, k, rho, pattern){
     }
     return(as.data.frame(cov))
   }
+  } else if(!missing(seed)){
+    if(missing(pattern)){
+      cov <- array(runif(n*k, -2, 2), dim=c(n, k))
+      cov <- cbind(seed, cov)
+      for(i in 2:k+1){
+        cov[, i] <- sapply(cov[, 1], rnormcor, rho=rho)
+      }
+      return(cov)
+    } else if(!missing(pattern)){
+      cov <- matrix(nrow = n, ncol = length(pattern$dist))
+      cov <- cbind(rnorm(nrow(cov)), cov)
+      
+      for(i in 2:ncol(cov)){
+        type <- match.arg(pattern$dist[i-1], c("norm", "binom", "chisq", "pois", "unif", 
+                                               "weibull", "gamma"))
+        cov[, i]  <- switch(type, 
+                            norm = rnormcorV(cov[, pattern$seed], rho=pattern$rho[i-1]),
+                            binom = rbinomcor(cov[, pattern$seed], rho=pattern$rho[i-1]),
+                            chisq = rchisqcor(cov[, pattern$seed], rho=pattern$rho[i-1]), 
+                            pois = rpoiscor(cov[, pattern$seed], rho=pattern$rho[i-1]), 
+                            unif = runifcor.cor(cov[, pattern$seed], rho=pattern$rho[i-1]),
+                            weibull= rweibullcor(cov[, pattern$seed], rho=pattern$rho[i-1]), 
+                            gamma = rgammacor(cov[, pattern$seed], rho=pattern$rho[i-1]))
+      }
+      if(!is.null(pattern$names)){
+        cov <- as.data.frame(cov)
+        names(cov) <- c("seed", pattern$names)
+        return(cov)
+      }
+      return(as.data.frame(cov))
+    }
+    
+  }
 }
 
 ##' Generate a binomial dependent variable
 ##'
-# need some flexibility to norm the resulting coefficients to avoid all 1 and 0s
+##' Allow the user to specify a formula for generating a binomial dependent variable
+##' 
+##' @param df dataframe to generate the dependent variable from
+##' @param form A named list containing the variables in df to be used to calculate the binomial probability, and 
+##' coefficients of those variables
+##' @param errors The way the error structure of the DGP formula should be established
+##' @param intercept An adjustment to the base probability
+##' @return A binomial vector by a formula generated out of the elements of form
+##' @details yadda yadaa yadda
+##' @note Yadda yadda yadda
+##' @export
+##' @author Jared E. Knowles
+##' @note Currently it can be easy for the user to build a formulate that results in all 0 or 1 results. 
+##' Use intercept to adjust accordingly. Additionally, coefficient scaes don't make sense at the moment.  
 genBinomialDV <- function(df, form, errors, intercept){
   # if form = NULL
   exp <- paste0(form$coefs, "*","df$", form$vars, collapse="+")
