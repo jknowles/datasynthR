@@ -55,7 +55,7 @@ rgammacor <- function(x, rho){
   y <- sapply(x, rnormcor, rho=rho)
   y2 <- pnorm(y)
   fit <- fitdistr(y2, densfun="gamma")
-  y3 <- sapply(y2, qweibull, shape=fit$estimate[[1]], scale=fit$estimate[[2]])
+  y3 <- sapply(y2, qgamma, shape=fit$estimate[[1]], rate=fit$estimate[[2]])
 }
 
 

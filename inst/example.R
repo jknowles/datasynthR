@@ -56,6 +56,25 @@ summary(testGLM3)
 ######################
 # Chain together with factor variables
 
+###########
 
-  
+seeds <- genNumeric(1000, 6, rho=0.3)
+
+struc <- list(dist=c("norm", "norm", "unif", "pois", "pois", "gamma", 
+                     "weibull"), 
+              rho=c(0.7, 0.3, -0.5, 0.3, -0.8, 0.05, 0.7), 
+              names=c("test1", "test2", "noise", "daysattended", 
+                      "daysOUT", "bad", "bad2"), 
+              seed = cbind(seeds[,1], seeds[,2], seeds[,3], seeds[, 4], seeds[, 5], 
+                       seeds[, 6], seeds[,1]))
+
+dat <- genNumeric(1000, seed=TRUE, pattern=struc)
+
+cor(seeds[,1], dat[,1])
+cor(seeds[,2], dat[,2])
+cor(seeds[,3], dat[,3])
+cor(seeds[,4], dat[,4])
+cor(seeds[,5], dat[,5])
+cor(seeds[,6], dat[,6])
+cor(seeds[,1], dat[,7])
   

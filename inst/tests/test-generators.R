@@ -120,6 +120,30 @@ test_that("Function gets the right answer!", {
   expect_that(tol2, is_less_than(0.1))
 })
 
+context("Test user specified seed in patterned structure")
+
+seeds <- genNumeric(1000, 6, rho=0.3)
+struc <- list(dist=c("norm", "norm", "unif", "pois", "pois", "gamma", 
+                     "weibull"), 
+              rho=c(0.7, 0.3, -0.5, 0.3, -0.8, 0.05, 0.7), 
+              names=c("test1", "test2", "noise", "daysattended", 
+                      "daysOUT", "bad", "bad2"), 
+              seed = cbind(seeds[,1], seeds[,2], seeds[,3], seeds[, 4], seeds[, 5], 
+                           seeds[, 6], seeds[,1]))
+
+dat <- genNumeric(1000, seed=TRUE, pattern=struc)
+
+test_that("Data generates the right answer", {
+  expect_that(abs(cor(seeds[,1], dat[,1]) - struc$rho[1]), is_less_than(.05))
+  expect_that(abs(cor(seeds[,2], dat[,2]) - struc$rho[2]), is_less_than(.05))
+  expect_that(abs(cor(seeds[,3], dat[,3]) - struc$rho[3]), is_less_than(.05))
+  expect_that(abs(cor(seeds[,4], dat[,4]) - struc$rho[4]), is_less_than(.05))
+  expect_that(abs(cor(seeds[,5], dat[,5]) - struc$rho[5]), is_less_than(.05))
+  expect_that(abs(cor(seeds[,6], dat[,6]) - struc$rho[6]), is_less_than(.05))
+  expect_that(abs(cor(seeds[,1], dat[,7]) - struc$rho[7]), is_less_than(.05))
+})
+
+
 
 context("Speed")
 
@@ -194,13 +218,6 @@ test_that("Bivariate relationships exist and magnitude is correct", {
   expect_that(table(test2)["TRUE"][[1]], is_more_than(round(.9*length(test2))))
 })
 
-context("User specified seed works")
-
-
-
-test_that("User specified seed can work", {
-  
-})
 
 context("Speed tests")
 
@@ -257,7 +274,5 @@ test_that("Test extreme values of RHO", {
   expect_that(abs(gammaGK(test2[,1], test2[,4])$gamma - RHO2), is_less_than(tol))
 })
 
-
-gammaGK(test2[,1], test2[,2])
 
 

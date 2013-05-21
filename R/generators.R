@@ -73,23 +73,23 @@ genNumeric <- function(n, k, rho, seed, pattern){
       return(cov)
     } else if(!missing(pattern)){
       cov <- matrix(nrow = n, ncol = length(pattern$dist))
-      cov <- cbind(rnorm(nrow(cov)), cov)
+      #cov <- cbind(rnorm(nrow(cov)), cov)
       
-      for(i in 2:ncol(cov)){
-        type <- match.arg(pattern$dist[i-1], c("norm", "binom", "chisq", "pois", "unif", 
+      for(i in 1:ncol(cov)){
+        type <- match.arg(pattern$dist[i], c("norm", "binom", "chisq", "pois", "unif", 
                                                "weibull", "gamma"))
         cov[, i]  <- switch(type, 
-                            norm = rnormcorV(cov[, pattern$seed], rho=pattern$rho[i-1]),
-                            binom = rbinomcor(cov[, pattern$seed], rho=pattern$rho[i-1]),
-                            chisq = rchisqcor(cov[, pattern$seed], rho=pattern$rho[i-1]), 
-                            pois = rpoiscor(cov[, pattern$seed], rho=pattern$rho[i-1]), 
-                            unif = runifcor.cor(cov[, pattern$seed], rho=pattern$rho[i-1]),
-                            weibull= rweibullcor(cov[, pattern$seed], rho=pattern$rho[i-1]), 
-                            gamma = rgammacor(cov[, pattern$seed], rho=pattern$rho[i-1]))
+                            norm = rnormcorV(pattern$seed[,i], rho=pattern$rho[i]),
+                            binom = rbinomcor(pattern$seed[,i], rho=pattern$rho[i]),
+                            chisq = rchisqcor(pattern$seed[,i], rho=pattern$rho[i]), 
+                            pois = rpoiscor(pattern$seed[,i], rho=pattern$rho[i]), 
+                            unif = runifcor.cor(pattern$seed[,i], rho=pattern$rho[i]),
+                            weibull= rweibullcor(pattern$seed[,i], rho=pattern$rho[i]), 
+                            gamma = rgammacor(pattern$seed[,i], rho=pattern$rho[i]))
       }
       if(!is.null(pattern$names)){
         cov <- as.data.frame(cov)
-        names(cov) <- c("seed", pattern$names)
+        names(cov) <- c(pattern$names)
         return(cov)
       }
       return(as.data.frame(cov))
