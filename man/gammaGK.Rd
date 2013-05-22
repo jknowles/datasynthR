@@ -1,0 +1,33 @@
+\name{gammaGK}
+\alias{gammaGK}
+\title{Estimate the Goodman and Kruskal gamma statistic}
+\usage{
+  gammaGK(x, y = NULL, print = FALSE)
+}
+\arguments{
+  \item{x}{an unordered factor variable}
+
+  \item{y}{an unordered factor variable}
+
+  \item{A}{logical vector indicating whether results should
+  be printed to the console}
+}
+\value{
+  A named list with gamma, standard error of gamma, p-value
+  of gamma, and statistical significance
+}
+\description{
+  Estimate the correlation between two unordered factor
+  variables using the Goodman and Kruskal gamma statistic
+}
+\note{
+  Yadda yadda yadda
+}
+\author{
+  Jared E. Knowles
+}
+\references{
+  Adapted from Simon Jackman from:
+  \url{http://jackman.stanford.edu/classes/151B/06/class0517.r}
+}
+

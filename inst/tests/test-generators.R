@@ -312,14 +312,6 @@ struc <- list(dist=c("norm", "norm", "unif", "pois", "pois", "gamma",
 
 dat <- genNumeric(10000, pattern=struc)
 
-# cor(seeds[,1], dat[,1])
-# cor(seeds[,2], dat[,2])
-# cor(seeds[,3], dat[,3])
-# cor(seeds[,4], dat[,4])
-# cor(seeds[,5], dat[,5])
-# cor(seeds[,6], dat[,6])
-# cor(seeds[,1], dat[,7])
-
 dat1 <- genFactor(10000, 3, nlevel=3, rho=0.8)
 dat2 <- genFactor(10000, 4, nlevel=4, rho= - 0.1, seed=dat[,6])
 dat3 <- genFactor(10000, 4, nlevel=6, rho= -0.2, seed=dat2[,4])

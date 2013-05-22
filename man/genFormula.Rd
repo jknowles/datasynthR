@@ -1,0 +1,34 @@
+\name{genFormula}
+\alias{genFormula}
+\title{Generate model matrix terms}
+\usage{
+  genFormula(df, vars)
+}
+\arguments{
+  \item{df}{dataframe to generate the dependent variable
+  from}
+
+  \item{vars}{A vector of variable names in df to generate
+  the formula terms from}
+}
+\value{
+  A character vector representing the terms in a formula
+  resulting from using the terms in vars
+}
+\description{
+  Allow the user to determine the number of coefficients
+  needed
+}
+\details{
+  Help figure out
+}
+\note{
+  Yadda yadda yadda
+
+  Convenience function to help user understand what factor
+  terms need to be expanded
+}
+\author{
+  Jared E. Knowles
+}
+

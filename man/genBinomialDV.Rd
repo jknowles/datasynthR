@@ -26,15 +26,17 @@
   binomial dependent variable
 }
 \details{
-  yadda yadaa yadda
+  Coefficients needs to be long enough to incorporate the
+  factor levels
 }
 \note{
   Yadda yadda yadda
 
-  Currently it can be easy for the user to build a
-  formulate that results in all 0 or 1 results. Use
-  intercept to adjust accordingly. Additionally,
-  coefficient scaes don't make sense at the moment.
+  Currently it can be easy for the user to build a formulae
+  that results in all 0 or 1 results. Use intercept to
+  adjust accordingly. Additionally, coefficient scaes don't
+  make sense at the moment. Still need to add the ability
+  to have confounders in place.
 }
 \author{
   Jared E. Knowles

@@ -1,16 +1,16 @@
-
-###########################################################
-## gammaGK function
-##
-## Goodman Kruskal gamma measure of association
-## for ordinal variables
-##
-## simon jackman
-## department of political science
-## stanford university
-## From: http://jackman.stanford.edu/classes/151B/06/class0517.r
-##########################################################
-gammaGK <- function(x,y=NULL, print=FALSE){
+##' Estimate the Goodman and Kruskal gamma statistic
+##'
+##' Estimate the correlation between two unordered factor variables using the Goodman and Kruskal gamma statistic 
+##' 
+##' @param x an unordered factor variable
+##' @param y an unordered factor variable
+##' @param A logical vector indicating whether results should be printed to the console
+##' @return A named list with gamma, standard error of gamma, p-value of gamma, and statistical significance
+##' @note Yadda yadda yadda
+##' @export
+##' @author Jared E. Knowles
+##' @references Adapted from Simon Jackman from: \url{http://jackman.stanford.edu/classes/151B/06/class0517.r}
+gammaGK <- function(x, y=NULL, print=FALSE){
   concordant <- function(x){ 
     ## get sum(matrix values > r AND > c) 
     ## for each matrix[r, c] 
@@ -64,26 +64,26 @@ gammaGK <- function(x,y=NULL, print=FALSE){
   stdError <- 1/sqrt(arg)
   z <- gamma/stdError
   if(print==TRUE){
-  cat("Goodman-Kruskal gamma statistic:\n")
-  cat(paste("Concordant Pairs",c,"\n"))
-  cat(paste("Discordant Pairs",d,"\n\n"))
-  cat(paste("Estimate of gamma:",
-            signif(gamma,.Options$digits),
-            "Standard error:",
-            signif(stdError,.Options$digits),
-            "\n\n"))
-  
-  cat(paste("H0: gamma = 0 vs HA: two-sided\n"))
-  cat(paste("z:",
-            signif(z, .Options$digits),
-            "p-value:",
-            signif(2*(1-pnorm(abs(z))), .Options$digits),
-            "\n\n"))
-  if(c<51 | d<51){
-    cat("Warning: p-values are based on a normal approximation to the\n")
-    cat("sampling distribution of the z test statistic, which is commonly\n")
-    cat("considered to be good only if C and D are both > 50.\n")
-  }
+    cat("Goodman-Kruskal gamma statistic:\n")
+    cat(paste("Concordant Pairs",c,"\n"))
+    cat(paste("Discordant Pairs",d,"\n\n"))
+    cat(paste("Estimate of gamma:",
+              signif(gamma,.Options$digits),
+              "Standard error:",
+              signif(stdError,.Options$digits),
+              "\n\n"))
+    
+    cat(paste("H0: gamma = 0 vs HA: two-sided\n"))
+    cat(paste("z:",
+              signif(z, .Options$digits),
+              "p-value:",
+              signif(2*(1-pnorm(abs(z))), .Options$digits),
+              "\n\n"))
+    if(c<51 | d<51){
+      cat("Warning: p-values are based on a normal approximation to the\n")
+      cat("sampling distribution of the z test statistic, which is commonly\n")
+      cat("considered to be good only if C and D are both > 50.\n")
+    }
   }
   return(list(gamma = signif(gamma,.Options$digits), 
               se = signif(stdError,.Options$digits), 
