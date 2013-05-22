@@ -1,0 +1,22 @@
+\name{vecNAsearch}
+\alias{vecNAsearch}
+\title{Count the proportion of NA values in a vector}
+\usage{
+  vecNAsearch(x)
+}
+\arguments{
+  \item{x}{a vector of any class that contains NA values}
+}
+\value{
+  the proportion of x that are NA values
+}
+\description{
+  Return the proportion of vector x that are NA
+}
+\note{
+  Yadda yadda yadda
+}
+\author{
+  Jared E. Knowles
+}
+

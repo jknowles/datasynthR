@@ -1,0 +1,26 @@
+\name{MCAR.df}
+\alias{MCAR.df}
+\title{Assign NAs to columns in a dataframe completely at random}
+\usage{
+  MCAR.df(df, p)
+}
+\arguments{
+  \item{df}{a dataframe that missing data should be
+  supplied to}
+
+  \item{p}{A value from 0 to 1 representing the proportion
+  of df that should be replaced with NAs}
+}
+\value{
+  df with proportion p of values replaced with NA
+}
+\description{
+  Create a dataframe with data missing completely at random
+}
+\note{
+  Yadda yadda yadda
+}
+\author{
+  Jared E. Knowles
+}
+

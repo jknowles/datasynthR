@@ -1,0 +1,26 @@
+\name{dimNA}
+\alias{dimNA}
+\title{Calculate missingness in a data.frame}
+\usage{
+  dimNA(df)
+}
+\arguments{
+  \item{df}{a dataframe with missing values}
+}
+\value{
+  a list indicating the total size of df, a vector of
+  counts of NA terms by columns a count of al missing
+  values in the df, and the total proportion of data
+  missing
+}
+\description{
+  Figure out the level and type of missingness in a
+  dataframe
+}
+\note{
+  Yadda yadda yadda
+}
+\author{
+  Jared E. Knowles
+}
+
