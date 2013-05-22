@@ -299,9 +299,59 @@ test_that("Test that seed is preserved and identical in two data frames",{
 
 context("Generate formulas")
 
+set.seed(382)
+seeds <- genNumeric(10000, 6, rho=0.1)
+
+struc <- list(dist=c("norm", "norm", "unif", "pois", "pois", "gamma", 
+                     "weibull"), 
+              rho=c(0.7, 0.3, -0.5, 0.3, -0.8, 0.05, 0.7), 
+              names=c("test1", "test2", "noise", "daysattended", 
+                      "daysOUT", "bad", "bad2"), 
+              seed = cbind(seeds[,1], seeds[,2], seeds[,3], seeds[, 4], seeds[, 5], 
+                           seeds[, 6], seeds[,1]))
+
+dat <- genNumeric(10000, pattern=struc)
+
+# cor(seeds[,1], dat[,1])
+# cor(seeds[,2], dat[,2])
+# cor(seeds[,3], dat[,3])
+# cor(seeds[,4], dat[,4])
+# cor(seeds[,5], dat[,5])
+# cor(seeds[,6], dat[,6])
+# cor(seeds[,1], dat[,7])
+
+dat1 <- genFactor(10000, 3, nlevel=3, rho=0.8)
+dat2 <- genFactor(10000, 4, nlevel=4, rho= - 0.1, seed=dat[,6])
+dat3 <- genFactor(10000, 4, nlevel=6, rho= -0.2, seed=dat2[,4])
+identical(dat2[,4], dat3[,1])
+
+names(dat1) <- sample(LETTERS, length(names(dat1)))
+names(dat2) <- sample(letters, length(names(dat2)))
+names(dat3) <- sample(paste0(letters,LETTERS), length(names(dat3)))
+mdf <- cbind(dat, dat1)
+mdf <- cbind(mdf, dat2)
+mdf <- cbind(mdf, dat3)
+#mdf <- mdf[, c(2:6, 12, 16, 19, 11)]
+
+myF <- list(vars = sample(names(mdf), 7))
+
+genFormula(mdf, myF$vars)
+
+#myF$coefs <- rnorm(length(genFormula(mdf, myF$vars)[-1]), mean=0, sd=4)
+
+#genFormula(mdf, myF$vars)
+
 
 context("Generate binomial dependent variables")
 
+myF$coefs <- rnorm(length(genFormula(mdf, myF$vars)[-1]), mean=0, sd=4)
+
+mdf$out <- genBinomialDV(mdf, form=myF, intercept=-2)
+table(mdf$out)
+
+mod1 <- glm(out ~ ., data=mdf, family="binomial")
+mod2 <- glm(out ~ bad2 + cC + F + tT + q + hH + r, data=mdf, 
+            family="binomial")
 
 context("Generate other dependent variables")
 

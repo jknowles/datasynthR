@@ -113,20 +113,34 @@ genNumeric <- function(n, k, rho, seed, pattern){
 ##' @export
 ##' @author Jared E. Knowles
 ##' @note Currently it can be easy for the user to build a formulae that results in all 0 or 1 results. 
-##' Use intercept to adjust accordingly. Additionally, coefficient scaes don't make sense at the moment.  
-genBinomialDV <- function(df, form, errors, intercept, center){
-  scale <- center
-  exp <- paste0(myF$coefs, "*","mod$", genFormula(df, myF$vars)[-1], collapse=" + ")
-  myF$exp <- parse(text=exp)
-  mm <- eval(parse(text=paste0("terms(~", paste0(myF$vars, collapse=' + '),")")))
+##' Use intercept to adjust accordingly. Additionally, coefficient scaes don't make sense at the moment. 
+##' Still need to add the ability to have confounders in place.
+genBinomialDV <- function(df, form, errors, intercept){
+  range01 <- function(x){(x-min(x))/(max(x)-min(x))}
+  exp <- paste0(form$coefs, "*","mod$", genFormula(df, form$vars)[-1], collapse=" + ")
+  form$exp <- parse(text=exp)
+  mm <- eval(parse(text=paste0("terms(~", paste0(form$vars, collapse=' + '),")")))
   mod <- as.data.frame(model.matrix(mm, df))
-  z <- intercept + eval(myF$exp) + rnorm(dim(mod)[1])
-  z <- ifelse(scale==TRUE, scale(z, center=TRUE)[,1], z)
-  pr <- 1/(1+exp(-z))
-  y = rbinom(dim(mod)[1], 1, pr)
-  return(y)
+  mod$z <- intercept + eval(form$exp) + runif(dim(mod)[1])
+  mod$pr <- 1/(1+exp(-mod$z))
+  mod$pr <- range01(scale(mod$pr, center=TRUE))
+  mod$y <- rbinom(dim(mod)[1], 1, mod$pr)
+  return(mod$y)
 }
-  
+
+##' Generate model matrix terms 
+##'
+##' Allow the user to determine the number of coefficients needed 
+##' 
+##' @param df dataframe to generate the dependent variable from
+##' @param vars A vector of variable names in df to generate the formula terms from
+##' @return A character vector representing the terms in a formula resulting from using the 
+##' terms in vars
+##' @details Help figure out
+##' @note Yadda yadda yadda
+##' @export
+##' @author Jared E. Knowles
+##' @note Convenience  function to help user understand what factor terms need to be expanded 
 genFormula <- function(df, vars){
   z <- eval(parse(text=paste0("terms(~", paste0(vars, collapse=' + '),")")))
   test <- model.matrix(z, df)

@@ -92,20 +92,49 @@ mdf <- cbind(dat, dat1)
 mdf <- cbind(mdf, dat2)
 mdf <- cbind(mdf, dat3)
 
-myF <- list(vars = sample(names(mdf), 7))
+mdf <- mdf[, c(2:6, 12, 16, 19, 11)]
+
+myF <- list(vars = sample(names(mdf), 5))
 
 genFormula(mdf, myF$vars)
 
-myF$coefs <- runif(length(genFormula(mdf, myF$vars)[-1]), min=-5, max=5)
+myF$coefs <- rnorm(length(genFormula(mdf, myF$vars)[-1]))
 
-mdf$out <- genBinomialDV(mdf, myF, intercept=-2, center=FALSE)
+mdf$out <- genBinomialDV(mdf, form=myF, intercept=-50)
 table(mdf$out)
 
 mod1 <- glm(out ~ ., data=mdf, family="binomial")
-mod2 <- glm(out ~ bB + test2 + I + j + cC + J + f, data=mdf, 
+mod2 <- glm(out ~ noise + c + test1 + out + aA, data=mdf, 
             family="binomial")
 
 
+exp <- paste0(myF$coefs, "*","mod$", genFormula(mdf, myF$vars)[-1], collapse=" + ")
+myF$exp <- parse(text=exp)
+mm <- eval(parse(text=paste0("terms(~", paste0(myF$vars, collapse=' + '),")")))
+mod <- as.data.frame(model.matrix(mm, mdf))
+mod$z <- 150 + eval(myF$exp) + runif(dim(mod)[1])
+#z <- ifelse(scale==TRUE, scale(z, center=TRUE)[,1], z)
+
+mod$pr = 1/(1+exp(-mod$z))         # pass through an inv-logit function
+summary(mod$pr)
+mod$y = rbinom(dim(mod)[1],1,mod$pr) 
+
+summary(glm(y ~ . -z -pr , data=mod, family="binomial"))
+
+table(mod$y)
+summary(mod)
+
+mod$z <- scale(mod$z)
+mod$b <- pnorm(mod$z)
+mod$b <- rbinom(dim(mod)[1], 1, pr=mod$b)
+  
+
+mod$pr <- rnormcorV(mod$z, 0.1)
+mod$pr <- rbinomcor(scale(mod$z), 0.99)
+
+mod$pr <- 1/(1+exp(-mod$z))
+y = rbinom(dim(mod)[1], 1, pr)
+return(y)
 
 ###########################################################
 exp <- paste0(myF$coefs, "*","mod$", genFormula(mdf, myF$vars)[-1], collapse=" + ")
