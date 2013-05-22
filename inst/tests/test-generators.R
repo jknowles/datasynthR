@@ -274,5 +274,34 @@ test_that("Test extreme values of RHO", {
   expect_that(abs(gammaGK(test2[,1], test2[,4])$gamma - RHO2), is_less_than(tol))
 })
 
+context("Can chain together using common starting seed")
 
+
+struc <- list(dist=c("norm", "norm", "unif", "pois", "pois", "gamma", 
+                     "weibull"), 
+              rho=c(0.7, 0.3, -0.5, 0.3, -0.8, 0.05, 0.7), 
+              names=c("test1", "test2", "noise", "daysattended", 
+                      "daysOUT", "bad", "bad2"), 
+              seed = cbind(seeds[,1], seeds[,2], seeds[,3], seeds[, 4], seeds[, 5], 
+                           seeds[, 6], seeds[,1]))
+
+dat1 <- genFactor(1000, 3, nlevel=3, rho=0.8)
+dat2 <- genFactor(1000, 4, nlevel=4, rho=0.3, seed=rnorm(1000))
+dat3 <- genFactor(1000, 4, nlevel=6, rho=-0.7, seed=dat2[,4])
+
+identical(dat2[,4], dat3[,1])
+
+
+test_that("Test that seed is preserved and identical in two data frames",{
+  expect_identical(dat2[, 4], dat3[, 1])
+  
+})
+
+context("Generate formulas")
+
+
+context("Generate binomial dependent variables")
+
+
+context("Generate other dependent variables")
 

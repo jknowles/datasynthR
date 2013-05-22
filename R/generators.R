@@ -108,22 +108,30 @@ genNumeric <- function(n, k, rho, seed, pattern){
 ##' @param errors The way the error structure of the DGP formula should be established
 ##' @param intercept An adjustment to the base probability
 ##' @return A binomial vector by a formula generated out of the elements of form
-##' @details yadda yadaa yadda
+##' @details Coefficients needs to be long enough to incorporate the factor levels
 ##' @note Yadda yadda yadda
 ##' @export
 ##' @author Jared E. Knowles
-##' @note Currently it can be easy for the user to build a formulate that results in all 0 or 1 results. 
+##' @note Currently it can be easy for the user to build a formulae that results in all 0 or 1 results. 
 ##' Use intercept to adjust accordingly. Additionally, coefficient scaes don't make sense at the moment.  
-genBinomialDV <- function(df, form, errors, intercept){
-  # if form = NULL
-  exp <- paste0(form$coefs, "*","df$", form$vars, collapse="+")
-  form$exp <- parse(text=exp)
-  z <- intercept + eval(form$exp) + runif(dim(df)[1])
+genBinomialDV <- function(df, form, errors, intercept, center){
+  scale <- center
+  exp <- paste0(myF$coefs, "*","mod$", genFormula(df, myF$vars)[-1], collapse=" + ")
+  myF$exp <- parse(text=exp)
+  mm <- eval(parse(text=paste0("terms(~", paste0(myF$vars, collapse=' + '),")")))
+  mod <- as.data.frame(model.matrix(mm, df))
+  z <- intercept + eval(myF$exp) + rnorm(dim(mod)[1])
+  z <- ifelse(scale==TRUE, scale(z, center=TRUE)[,1], z)
   pr <- 1/(1+exp(-z))
-  y = rbinom(dim(df)[1], 1, pr)
+  y = rbinom(dim(mod)[1], 1, pr)
   return(y)
 }
-
+  
+genFormula <- function(df, vars){
+  z <- eval(parse(text=paste0("terms(~", paste0(vars, collapse=' + '),")")))
+  test <- model.matrix(z, df)
+  return(dimnames(test)[[2]])
+}
 
 ##' Generate a dataframe of unordered factors with known associations
 ##' 

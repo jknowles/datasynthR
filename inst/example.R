@@ -58,7 +58,7 @@ summary(testGLM3)
 
 ###########
 
-seeds <- genNumeric(1000, 6, rho=0.3)
+seeds <- genNumeric(10000, 6, rho=0.3)
 
 struc <- list(dist=c("norm", "norm", "unif", "pois", "pois", "gamma", 
                      "weibull"), 
@@ -68,21 +68,86 @@ struc <- list(dist=c("norm", "norm", "unif", "pois", "pois", "gamma",
               seed = cbind(seeds[,1], seeds[,2], seeds[,3], seeds[, 4], seeds[, 5], 
                        seeds[, 6], seeds[,1]))
 
-dat <- genNumeric(1000, pattern=struc)
+dat <- genNumeric(10000, pattern=struc)
 
-cor(seeds[,1], dat[,1])
-cor(seeds[,2], dat[,2])
-cor(seeds[,3], dat[,3])
-cor(seeds[,4], dat[,4])
-cor(seeds[,5], dat[,5])
-cor(seeds[,6], dat[,6])
-cor(seeds[,1], dat[,7])
+# cor(seeds[,1], dat[,1])
+# cor(seeds[,2], dat[,2])
+# cor(seeds[,3], dat[,3])
+# cor(seeds[,4], dat[,4])
+# cor(seeds[,5], dat[,5])
+# cor(seeds[,6], dat[,6])
+# cor(seeds[,1], dat[,7])
 
-dat1 <- genFactor(1000, 3, nlevel=3, rho=0.8)
-
-dat2 <- genFactor(1000, 4, nlevel=4, rho=0.3, seed=dat[,6])
-dat3 <- genFactor(1000, 4, nlevel=6, rho=-0.7, seed=dat2[,4])
-rm(dat3)
+dat1 <- genFactor(10000, 3, nlevel=3, rho=0.8)
+dat2 <- genFactor(10000, 4, nlevel=4, rho=0.3, seed=dat[,6])
+dat3 <- genFactor(10000, 4, nlevel=6, rho=-0.7, seed=dat2[,4])
 
 identical(dat2[,4], dat3[,1])
+
+names(dat1) <- sample(LETTERS, length(names(dat1)))
+names(dat2) <- sample(letters, length(names(dat2)))
+names(dat3) <- sample(paste0(letters,LETTERS), length(names(dat3)))
+
+mdf <- cbind(dat, dat1)
+mdf <- cbind(mdf, dat2)
+mdf <- cbind(mdf, dat3)
+
+myF <- list(vars = sample(names(mdf), 7))
+
+genFormula(mdf, myF$vars)
+
+myF$coefs <- runif(length(genFormula(mdf, myF$vars)[-1]), min=-5, max=5)
+
+mdf$out <- genBinomialDV(mdf, myF, intercept=-2, center=FALSE)
+table(mdf$out)
+
+mod1 <- glm(out ~ ., data=mdf, family="binomial")
+mod2 <- glm(out ~ bB + test2 + I + j + cC + J + f, data=mdf, 
+            family="binomial")
+
+
+
+###########################################################
+exp <- paste0(myF$coefs, "*","mod$", genFormula(mdf, myF$vars)[-1], collapse=" + ")
+myF$exp <- parse(text=exp)
+
+
+genFormula(mdf, myF$vars)
+z <- eval(parse(text=paste0("terms(~", paste0(myF$vars, collapse=' + '),")")))
+test <- model.matrix(z, mdf)
+
+
+
+
+exp <- paste0(myF$coefs, "*","mod$", genFormula(mdf, myF$vars)[-1], collapse=" + ")
+myF$exp <- parse(text=exp)
+mm <- eval(parse(text=paste0("terms(~", paste0(myF$vars, collapse=' + '),")")))
+mod <- as.data.frame(model.matrix(mm, mdf))
+
+z <- 2 + eval(myF$exp) + runif(dim(mod)[1])
+pr <- 1/(1+exp(scale(-z, center=TRUE)))
+y = rbinom(dim(mod)[1], 1, pr)
+return(y)
+
+coefs <- runif(length(genFormula(mdf, myF$vars)), min=-2, max=2)
+myF$coefs <- coefs
+
+
+vars <- names(as.data.frame(test))
+coefs <- runif(length(vars), min=-2, max=2)
+
+out <- coefs * test
+out <- apply(out, 1, sum)
+
+exp <- paste0(myF$coefs, "*","df$", myF$vars, collapse="+")
+
+
+z <- eval(parse(text=paste0("terms(.~", paste0(myF$vars, collapse=' + '),")")))
+
+
+
+terms( . ~mdf[,9] + mdf[,4])
+
+mdf$out <- genBinomialDV(mdf, form=myF, intercept=3)
+
 
