@@ -1,0 +1,4 @@
+TODO:
+
+Add multivariate regression structures. For an example approach see: 
+http://www.quantumforest.com/2011/10/simulating-data-following-a-given-covariance-structure/
