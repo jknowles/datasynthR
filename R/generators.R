@@ -115,7 +115,12 @@ genNumeric <- function(n, k, rho, seed, pattern){
 ##' @note Currently it can be easy for the user to build a formulae that results in all 0 or 1 results. 
 ##' Use intercept to adjust accordingly. Additionally, coefficient scaes don't make sense at the moment. 
 ##' Still need to add the ability to have confounders in place.
-genBinomialDV <- function(df, form, errors, intercept){
+genBinomialDV <- function(df, form, errors, intercept, type = c("binary", "response")){
+  if (missing(type)){
+    type <- "binary"
+  } else {
+    type <- match.arg(type)
+  }
   range01 <- function(x){(x-min(x))/(max(x)-min(x))}
   exp <- paste0(form$coefs, "*","mod$", genFormula(df, form$vars)[-1], collapse=" + ")
   form$exp <- parse(text=exp)
@@ -125,7 +130,11 @@ genBinomialDV <- function(df, form, errors, intercept){
   mod$pr <- 1/(1+exp(-mod$z))
   mod$pr <- range01(scale(mod$pr, center=TRUE))
   mod$y <- rbinom(dim(mod)[1], 1, mod$pr)
-  return(mod$y)
+  if(type=="binary"){
+    return(mod$y)
+  } else if(type=="response"){
+    return(mod$pr)
+  }
 }
 
 ##' Generate model matrix terms 

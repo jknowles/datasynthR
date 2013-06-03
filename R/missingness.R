@@ -126,6 +126,10 @@ MCARcheck.df <- function(df){
   return(list(gammas = results2, se = results3, sig.test = results1))
 }
 
+# MAR
+
+
+
 
 # # Consider building a probability model into the function to calculate missingness
 # MAR <- function(df, scale){
