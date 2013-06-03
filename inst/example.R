@@ -156,7 +156,7 @@ mod <- as.data.frame(model.matrix(mm, mdf))
 z <- 2 + eval(myF$exp) + runif(dim(mod)[1])
 pr <- 1/(1+exp(scale(-z, center=TRUE)))
 y = rbinom(dim(mod)[1], 1, pr)
-return(y)
+
 
 coefs <- runif(length(genFormula(mdf, myF$vars)), min=-2, max=2)
 myF$coefs <- coefs
@@ -179,4 +179,8 @@ terms( . ~mdf[,9] + mdf[,4])
 
 mdf$out <- genBinomialDV(mdf, form=myF, intercept=3)
 
+names(mdf)
+
+################################################################################
+# Add missingness
 

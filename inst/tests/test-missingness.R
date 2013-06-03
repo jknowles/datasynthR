@@ -92,6 +92,11 @@ test_that("Function is fast and accurate", {
   expect_that(a2, is_less_than(t))
 })
 
+
+test_that("Function produces data MCAR", {
+  
+})
+
 context("dimNA function")
 
 
@@ -120,6 +125,9 @@ test_that("Function returns the correct dimensions answers", {
 test_that("Function is fast!", {
   expect_that(dimNA(covmat2), takes_less_than(.1))
 })
+
+
+
 # 
 # context("MAR data")
 # 
