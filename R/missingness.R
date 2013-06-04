@@ -110,6 +110,7 @@ MCARcheck <- function(x, y){
 ##' @export
 ##' @author Jared E. Knowles
 MCARcheck.df <- function(df){
+  # Add a check to subset on data that is missing
   # significance test
   missingTest1 <- function(i, j, data) {MCARcheck(data[,i], data[,j])$sig}
   mTP1 <- Vectorize(missingTest1, vectorize.args=list("i", "j"))
@@ -126,10 +127,39 @@ MCARcheck.df <- function(df){
   return(list(gammas = results2, se = results3, sig.test = results1))
 }
 
-# MAR
-
-
-
+##' Assign NAs to columns in a dataframe at random
+##'
+##' Create a dataframe with data missing at random by generating probability models
+##' of missing data from observable characteristics and then eliminating data based 
+##' on those results.
+##' 
+##' @param df a dataframe that missing data should be supplied to
+##' @param probs A single value from 0 to 1 representing the proportion of each column 
+##' that should be replaced with NAs, or a list of such values length of \code{vars}
+##' @param vars A list of variable names to be used in generating the probability models 
+##' for the missing data
+##' @return df with proportion p of values replaced with NA
+##' @note Yadda yadda yadda
+##' @export
+##' @author Jared E. Knowles
+MAR.df <- function(df, vars, probs){
+  if(length(probs) == 1){
+    probs <- rep(probs, length(vars))
+  } else if(length(probs) > 1){
+    if(length(probs) != length(vars)) stop("Lengths don't match.")
+  }
+  for(i in 1:length(vars)){
+    myF <- list(vars=sample(names(df) %w/o% vars, 4))
+    myF$coefs <- rnorm(length(genFormula(df, myF$vars)[-1]), mean=0, sd=1)
+    eval(parse(text=paste0("df$out", i, "<- genBinomialDV(df, form=myF, intercept=0, type='response')")))
+  }
+  for(j in 1:ncol(df)){
+    s <- sample(1:length(vars), 1)
+    eval(parse(text=paste0("q <- quantile(df$out",s ," ,.2, na.rm=T)")))
+    eval(parse(text=paste0("df[,", j, "][df$out", s," < ", q, "] <- NA")))
+  }
+  return(df)
+}
 
 # # Consider building a probability model into the function to calculate missingness
 # MAR <- function(df, scale){

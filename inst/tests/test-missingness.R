@@ -173,26 +173,22 @@ genFormula(mdf, myF$vars)
 
 
 misslist <- sample(names(mdf)[c(-1, -22)], 5)
+
 probs <- 0.12
 
-MAR.df <- function(df, vars, probs){
-  if(length(probs) == 1){
-    probs <- rep(probs, length(vars))
-  } else if(length(probs) > 1){
-    if(length(probs) != length(vars)) stop("Lengths don't match.")
-  }
-  for(i in 1:length(vars)){
-    myF <- list(vars=sample(names(df) %w/o% vars, 4))
-    myF$coefs <- rnorm(length(genFormula(df, myF$vars)[-1]), mean=0, sd=1)
-    eval(parse(text=paste0("df$out", i, "<- genBinomialDV(df, form=myF, intercept=0, type='response')")))
-    eval(parse(text=paste0("df$",misslist[i],"[df$out",i," < df$out1[cutoff(df$out1,",probs[i],")]] <- NA")))
-  }
-  return(df)
-}
+
 
 mdf2 <- MAR.df(mdf, vars=misslist, probs=probs)
+MCARcheck.df(mdf2[, c(-22, -23, -24, -25)])
 
+summary(mdf2)
 
+out2 <-mdf2$out2[order(mdf2$out2)]
+outb <- cumsum(out2)
+outc <- outb/sum(out2, na.rm=T)
+max(outc[outc<.1])
+
+class(quantile(mdf2$out2, .2, na.rm=T))
 
 length(misslist)
 
