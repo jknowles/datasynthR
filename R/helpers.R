@@ -91,3 +91,44 @@ gammaGK <- function(x, y=NULL, print=FALSE){
               sig = signif(2*(1-pnorm(abs(z))), .Options$digits)))
   invisible(NULL)
 }
+
+##' Cut out duplicate values
+##'
+cull <- function(tmpdf){
+  tmpdf$concat_fw <- paste(tmpdf$Var1, tmpdf$Var2, sep="")
+  tmpdf$concat_bw <- paste(tmpdf$Var2, tmpdf$Var1, sep="")
+  
+  ## Create a variable indicating the concatenation is unique
+  tmpdf$unique <- 0
+  
+  ## Create an empty data frame to hold all the unique concatenations
+  uniques <- as.data.frame(matrix(ncol=2, nrow=0))
+  colnames(uniques)[1] <- "concat_fw"
+  colnames(uniques)[2] <- "concat_bw"
+  
+  ## Loop through all the records in tmpdf
+  for(i in 1:length(tmpdf$concat_fw)) {
+    
+    ## Isolate the current record's forward and backward concatenation
+    temp <- tmpdf[i, c("concat_fw", "concat_bw")]
+    
+    ## If it hasn't been observed before, store it and set unique=1.
+    ## Otherwise, ignore it and leave unique=0.
+    if(!temp$concat_fw %in% uniques$concat_bw &
+         !temp$concat_bw %in% uniques$concat_fw)
+    {
+      uniques <- rbind(uniques, temp)
+      tmpdf$unique[i] <- 1
+    }
+    
+  }
+  
+  ## Change Var1 and Var2 to NA where unique==0
+  tmpdf$Var1[tmpdf$unique==0] <- NA
+  tmpdf$Var2[tmpdf$unique==0] <- NA
+  
+  ## Clean up
+  tmpdf$unique <- NULL; tmpdf$concat_fw <- NULL; tmpdf$concat_bw <- NULL;
+  tmpdf <- na.omit(tmpdf)
+  return(tmpdf)
+}

@@ -169,7 +169,7 @@ genFormula(mdf, myF$vars)
 # 
 # mdf$out.1 <- genBinomialDV(mdf, form=myF, intercept=-2, type="response")
 
-"%w/o%" <- function(x, y) x[!x %in% y] #--  x without y
+
 
 
 misslist <- sample(names(mdf)[c(-1, -22)], 5)
@@ -185,47 +185,12 @@ g <- MCARcheck.df(mdf2[, c(-22, -23, -24, -25, -26)])
 
 results <- g
 
-summary.MCAR <- function(results, p, print=FALSE){
-  library(reshape)
-  m1 <- melt(results$gammas[upper.tri(results$gammas, diag=TRUE)])
-  names(m1)[3] <- "gamma"
-  m2 <- melt(results$se)
-  names(m2)[3] <- "se"
-  m3 <- melt(results$sig)
-  names(m3)[3] <- "sig"
-  df <- merge(m1, m2)
-  df <- merge(df, m3)
-  df$X1 <- factor(df$X1, labels=results$names)
-  df$X2 <- factor(df$X2, labels=results$names)
-  names(df)[1] <- "Var1"
-  names(df)[2] <- "Var2"
-  df <- subset(df, Var1 != Var2)
-  df <- df[1:(nrow(df)/2)+10, ]
-  # Build summary items
-  p <- .05
-  df.tmp <- df[df$sig < p, ]
-  
-  pairs1 <- paste0(df.tmp$Var1,"-", df.tmp$Var2)
-  tmp <- pairs1[1:(length(pairs1)/2)]
-  pairs2 <- paste0(df.tmp$Var2,"-", df.tmp$Var1)
-  pairs2[!pairs2 %in% tmp]
-  
-  count_same <- function(x,y) return(length(intersect(unlist(x), unlist(y))))
-  
-  count_same(df.tmp$Var1, df.tmp$Var2)
-  
-  if(print==TRUE){
-    cat("Goodman-Kruskal gamma statistic:\n")
-    cat(paste("Total Pairs of Variables:", nrow(df)/2, "\n"))
-    cat(paste("Variable Pairs With Correlated Missingness:",nrow(df.tmp)/2,"\n"))
-    cat(paste("Variable Pairs Without Correlated Missingness:",
-              nrow(df)/2 - nrow(df.tmp)/2,"\n\n"))
-    cat(paste("Values of statistical significant gamma",
-              unique(df.tmp$gamma),"\n"))
 
-  }
+zzz <- summary.MCAR(g, print=TRUE)
 
-}
+tmpdf <-df
+
+
 
 library(reshape)
 #z <- as.data.frame(g$gammas)

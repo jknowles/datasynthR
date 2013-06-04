@@ -131,11 +131,44 @@ MCARcheck.df <- function(df){
 ##' Summary for MCAR checks
 ##' 
 ##' @param results results from MCARcheck.df
+##' @param p threshold for statistical significance on the gamma
+##' @print Option to print out results
 ##' @return summary of dependencies among missing values in dataset
 ##' @export
 ##' @author Jared E. Knowles
-summary.MCAR <- function(results){
+summary.MCAR <- function(results, p, print){
+  library(reshape)
+  m1 <- melt(results$gammas)
+  names(m1)[3] <- "gamma"
+  m2 <- melt(results$se)
+  names(m2)[3] <- "se"
+  m3 <- melt(results$sig)
+  names(m3)[3] <- "sig"
+  df <- merge(m1, m2)
+  df <- merge(df, m3)
+  df$X1 <- factor(df$X1, labels=results$names)
+  df$X2 <- factor(df$X2, labels=results$names)
+  names(df)[1] <- "Var1"
+  names(df)[2] <- "Var2"
+  df <- subset(df, Var1 != Var2)
+  df <- cull(df)
+  # Build summary items
+  p <- .05
+  df.tmp <- df[df$sig < p, ]
   
+  if(print==TRUE){
+    cat("Goodman-Kruskal Gamma Statistics for Missingness:\n")
+    cat(paste("Total Pairs of Variables:", nrow(df), "\n"))
+    cat(paste("Variable Pairs With Correlated Missingness:",nrow(df.tmp),"\n"))
+    cat(paste("Variable Pairs Without Correlated Missingness:",
+              nrow(df) - nrow(df.tmp),"\n\n"))
+    cat(paste("Values of statistically significant gamma: ",
+              unique(df.tmp$gamma),"\n"))
+  }
+  return(list(totalpairs = nrow(df), correlatedmissingpairs = nrow(df.tmp), 
+              noncorrelatedmissing = nrow(df) - nrow(df.tmp), 
+              gammas = unique(df.tmp$gamma), 
+              percentcorrelated = nrow(df.tmp)/ nrow(df)))
 }
 
 ##' Assign NAs to columns in a dataframe at random
@@ -172,13 +205,10 @@ MAR.df <- function(df, vars, probs){
   return(df)
 }
 
-# # Consider building a probability model into the function to calculate missingness
-# MAR <- function(df, scale){
-#   s <- scale
-#   n <- ncol(df) - 2
-#   for(i in 1:n){
-#     cor <- cor(df[, i], df[, i+1])
-#     cor <- abs(cor)
-#     df[, i:i+1] <- apply(df[, i:i+1], 2, MCARx, s*cor)
-#   }  
-# }
+##' Give a quick summary of tests for MCAR data
+##' 
+##' 
+##' 
+##' 
+##' 
+
