@@ -178,3 +178,29 @@ test_that("MAR data is not MCAR", {
   expect_approxto(dimNA(mdf2)[4], 0.12, tol=1)
 })
 
+context("MNAR")
+
+df <- mdf
+
+
+MAR.df <- function(df, probs){
+  if(length(probs) == 1){
+    probs <- rep(probs, length(vars))
+  } else if(length(probs) > 1){
+    if(length(probs) != length(vars)) stop("Lengths don't match.")
+  }
+  tmpdf <- genNumeric()
+  for(i in 1:length(vars)){
+    myF <- list(vars=sample(names(df) %w/o% vars, 4))
+    myF$coefs <- rnorm(length(genFormula(df, myF$vars)[-1]), mean=0, sd=1)
+    eval(parse(text=paste0("df$out", i, "<- genBinomialDV(df, form=myF, intercept=0, type='response')")))
+  }
+  for(j in 1:ncol(df)){
+    s <- sample(1:length(vars), 1)
+    eval(parse(text=paste0("q <- quantile(df$out",s ," , probs[",s,"], na.rm=T)")))
+    eval(parse(text=paste0("df[,", j, "][df$out", s," < ", q, "] <- NA")))
+  }
+  return(df)
+}
+
+

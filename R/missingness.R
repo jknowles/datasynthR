@@ -221,10 +221,6 @@ MAR.df <- function(df, vars, probs){
   return(df)
 }
 
-##' Give a quick summary of tests for MCAR data
-##' 
-##' 
-##' 
-##' 
-##' 
+##' Missing Not at Random
+
 
