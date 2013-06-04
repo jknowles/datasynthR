@@ -124,7 +124,18 @@ MCARcheck.df <- function(df){
   missingTest3 <- function(i, j, data) {MCARcheck(data[,i], data[,j])$se}
   mTP3 <- Vectorize(missingTest3, vectorize.args=list("i", "j"))
   results3 <- outer(1:K, 1:K, mTP3, data=df)
-  return(list(gammas = results2, se = results3, sig.test = results1))
+  return(list(gammas = results2, se = results3, sig.test = results1, 
+              names = names(df)))
+}
+
+##' Summary for MCAR checks
+##' 
+##' @param results results from MCARcheck.df
+##' @return summary of dependencies among missing values in dataset
+##' @export
+##' @author Jared E. Knowles
+summary.MCAR <- function(results){
+  
 }
 
 ##' Assign NAs to columns in a dataframe at random
@@ -155,7 +166,7 @@ MAR.df <- function(df, vars, probs){
   }
   for(j in 1:ncol(df)){
     s <- sample(1:length(vars), 1)
-    eval(parse(text=paste0("q <- quantile(df$out",s ," ,.2, na.rm=T)")))
+    eval(parse(text=paste0("q <- quantile(df$out",s ," , probs[",s,"], na.rm=T)")))
     eval(parse(text=paste0("df[,", j, "][df$out", s," < ", q, "] <- NA")))
   }
   return(df)
