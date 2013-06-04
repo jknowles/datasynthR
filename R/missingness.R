@@ -29,8 +29,8 @@ MCAR.df <- function(df, p){
     df <- apply(df, 2, MCARx, p)
   } else if(length(p) > 1) {
   df <- apply(df, 2, MCARx, sample(p, 1))
-  df <- as.data.frame(df)
   }
+  df <- as.data.frame(df)
   return(df)
 }
 
@@ -136,7 +136,7 @@ MCARcheck.df <- function(df){
 ##' @return summary of dependencies among missing values in dataset
 ##' @export
 ##' @author Jared E. Knowles
-summary.MCAR <- function(results, p, print){
+summary.MCARcheck <- function(results, p, print){
   library(reshape)
   m1 <- melt(results$gammas)
   names(m1)[3] <- "gamma"
@@ -168,7 +168,23 @@ summary.MCAR <- function(results, p, print){
   return(list(totalpairs = nrow(df), correlatedmissingpairs = nrow(df.tmp), 
               noncorrelatedmissing = nrow(df) - nrow(df.tmp), 
               gammas = unique(df.tmp$gamma), 
-              percentcorrelated = nrow(df.tmp)/ nrow(df)))
+              percentcorrelated = nrow(df.tmp)/ nrow(df), 
+              data = df))
+}
+
+##' MCAR Plot
+##' 
+##' @param results results from MCARcheck.df
+##' @return ggplot2 object 
+##' @export
+##' @author Jared E. Knowles
+MCARplot <- function(results){
+  z.m <- melt(results$gammas)
+  ggplot(z.m, aes(X1, X2, fill = value)) + geom_tile() + 
+    scale_fill_gradient2(low = "blue",  high = "yellow") + 
+    coord_cartesian(xlim=c(1, max(z.m$X1)), ylim=c(1, max(z.m$X2))) +
+    labs(x="Var1", y="Var2", 
+         title="Gamma Coefficients for Missingness Among \n Variables in Dataset")
 }
 
 ##' Assign NAs to columns in a dataframe at random

@@ -133,7 +133,6 @@ context("MAR data")
 
 set.seed(382)
 seeds <- genNumeric(10000, 6, rho=0.1)
-
 struc <- list(dist=c("norm", "norm", "unif", "pois", "pois", "gamma", 
                      "weibull"), 
               rho=c(0.7, 0.3, -0.5, 0.3, -0.8, 0.05, 0.7), 
@@ -141,97 +140,41 @@ struc <- list(dist=c("norm", "norm", "unif", "pois", "pois", "gamma",
                       "daysOUT", "bad", "bad2"), 
               seed = cbind(seeds[,1], seeds[,2], seeds[,3], seeds[, 4], seeds[, 5], 
                            seeds[, 6], seeds[,1]))
-
 dat <- genNumeric(10000, pattern=struc)
-
 dat1 <- genFactor(10000, 3, nlevel=3, rho=0.8)
 dat2 <- genFactor(10000, 4, nlevel=4, rho= - 0.1, seed=dat[,6])
 dat3 <- genFactor(10000, 4, nlevel=6, rho= -0.2, seed=dat2[,4])
-identical(dat2[,4], dat3[,1])
-
 names(dat1) <- sample(LETTERS, length(names(dat1)))
 names(dat2) <- sample(letters, length(names(dat2)))
 names(dat3) <- sample(paste0(letters,LETTERS), length(names(dat3)))
 mdf <- cbind(dat, dat1)
 mdf <- cbind(mdf, dat2)
 mdf <- cbind(mdf, dat3)
-#mdf <- mdf[, c(2:6, 12, 16, 19, 11)]
 
 myF <- list(vars = sample(names(mdf), 4))
-
 genFormula(mdf, myF$vars)
 
-#myF$coefs <- rnorm(length(genFormula(mdf, myF$vars)[-1]), mean=0, sd=4)
-
-#genFormula(mdf, myF$vars)
-
-# myF$coefs <- rnorm(length(genFormula(mdf, myF$vars)[-1]), mean=0, sd=4)
-# 
-# mdf$out.1 <- genBinomialDV(mdf, form=myF, intercept=-2, type="response")
-
-
-
-
 misslist <- sample(names(mdf)[c(-1, -22)], 5)
-
 probs <- 0.12
-
-
-
 mdf2 <- MAR.df(mdf, vars=misslist, probs=probs)
 dimNA(mdf2)
 
 g <- MCARcheck.df(mdf2[, c(-22, -23, -24, -25, -26)])
-
 results <- g
+zz <- summary.MCARcheck(g, print=FALSE)
 
+mdf3 <- MCAR.df(mdf, p=probs)
 
-zzz <- summary.MCAR(g, print=TRUE)
+aa <- summary.MCARcheck(MCARcheck.df(mdf3), print=FALSE)
 
-tmpdf <-df
-
-
-
-library(reshape)
-#z <- as.data.frame(g$gammas)
-z.m <- melt(g$gammas)
-
-ggplot(z.m, aes(X1, X2, fill = value)) + geom_tile() + 
-  scale_fill_gradient2(low = "blue",  high = "yellow") + 
-  coord_cartesian(xlim=c(1, max(z.m$X1)), ylim=c(1, max(z.m$X2))) + 
-  theme_dpi()
-
-
-
-ggplot(as.data.frame(g$gammas)) + aes(x=g$gammas[])
-
-summary(mdf2)
-
-out2 <-mdf2$out2[order(mdf2$out2)]
-outb <- cumsum(out2)
-outc <- outb/sum(out2, na.rm=T)
-max(outc[outc<.1])
-
-class(quantile(mdf2$out2, .2, na.rm=T))
-
-length(misslist)
-
-names(mdf)
-
-library(eeptools)
-
-mdf$out1[cutoff(mdf$out1, .1)]
-
-
-
-# 
-# 
-# N <- 5000
-# K <- 25
-# P <- 0.43278456
-# RHO2 <- -0.24
-# covmat <- genNumeric(N, K, rho=RHO2)
-# 
-# 
-# covmat2 <- MAR(covmat, 1)
+test_that("MAR data is not MCAR", {
+  expect_that(aa[[2]], is_less_than(2))
+  expect_that(zz[[2]], is_more_than(100))
+  expect_that(dimNA(mdf3)[4], approxto(0.12, tol=0.015))
+  expect_that(dimNA(mdf2)[4], approxto(0.12, tol=0.015))
+  expect_approxto(dimNA(mdf3)[4], 0.12, tol=0.015)
+  expect_approxto(dimNA(mdf2)[4], 0.12, tol=0.015)
+  expect_approxto(dimNA(mdf2)[4], 0.12, tol=0.00015)
+  expect_approxto(dimNA(mdf2)[4], 0.12, tol=1)
+})
 
