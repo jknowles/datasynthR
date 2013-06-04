@@ -183,12 +183,19 @@ genFormula <- function(df, vars){
 ##' dat2 <- genFactor(50, 10, nlevel=6, rho=0.2)
 ##' gammaGK(dat2[, 1], dat2[, 2])
 genFactor <- function(n, k, nlevel, rho, seed, ...){
+  if(nlevel >= length(letters)){
+    zz <- expand.grid(letters, LETTERS)
+    smp <- unique(paste0(zz[,1], zz[,2])) #
+  } else if(nlevel < length(letters)) {
+    smp <- letters
+  }
   if(missing(seed)){
   cov <- genNumeric(n, k, rho, ...)
   cov <- as.data.frame(cov)
   for(i in 1:ncol(cov)){
     cov[, i] <- cut(cov[, i], breaks=nlevel)
-    cov[, i] <- factor(cov[, i], labels=sample(letters, nlevel))
+    draw <- length(unique(cov[, i]))
+    cov[, i] <- factor(cov[, i], labels=sample(draw, nlevel))
   }
   return(as.data.frame(cov))
   }
@@ -198,7 +205,8 @@ genFactor <- function(n, k, nlevel, rho, seed, ...){
     cov <- as.data.frame(cov)
     for(i in 1:ncol(cov)){
       cov[, i] <- cut(cov[, i], breaks=nlevel)
-      cov[, i] <- factor(cov[, i], labels=sample(letters, nlevel))
+      draw <- length(unique(cov[, i]))
+      cov[, i] <- factor(cov[, i], labels=sample(smp, draw))
     }
     } else if(class(seed)!="numeric"){
       seed.tmp <- as.numeric(as.factor(seed))
@@ -207,10 +215,11 @@ genFactor <- function(n, k, nlevel, rho, seed, ...){
       cov[, 1] <- seed
       for(i in 2:ncol(cov)){
         cov[, i] <- cut(cov[, i], breaks=nlevel)
-        cov[, i] <- factor(cov[, i], labels=sample(letters, nlevel))
+        draw <- length(unique(cov[, i]))
+        cov[, i] <- factor(cov[, i], labels=sample(smp, draw))
       }
     }
     return(as.data.frame(cov))
   }
 }
-  
+  # check errors for very large factor levels
