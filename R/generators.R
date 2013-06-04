@@ -182,7 +182,10 @@ genFormula <- function(df, vars){
 ##' # low n deviates further from rho
 ##' dat2 <- genFactor(50, 10, nlevel=6, rho=0.2)
 ##' gammaGK(dat2[, 1], dat2[, 2])
-genFactor <- function(n, k, nlevel, rho, seed, ...){
+genFactor <- function(n, k, nlevel, rho, seed, keepSeed, ...){
+  if(missing(keepSeed)){
+    keepSeed <- TRUE
+  } else {keepSeed <- keepSeed}
   if(nlevel >= length(letters)){
     zz <- expand.grid(letters, LETTERS)
     smp <- unique(paste0(zz[,1], zz[,2])) #
@@ -197,7 +200,12 @@ genFactor <- function(n, k, nlevel, rho, seed, ...){
     draw <- length(unique(cov[, i]))
     cov[, i] <- factor(cov[, i], labels=sample(draw, nlevel))
   }
-  return(as.data.frame(cov))
+  if(keepSeed == TRUE){
+    return(as.data.frame(cov))
+  } else if(keepSeed == FALSE){
+    cov <- cov[, 2:ncol(cov)]
+    return(as.data.frame(cov))
+  }
   }
   if(!missing(seed)){
     if(class(seed)=="numeric"){
@@ -219,7 +227,12 @@ genFactor <- function(n, k, nlevel, rho, seed, ...){
         cov[, i] <- factor(cov[, i], labels=sample(smp, draw))
       }
     }
-    return(as.data.frame(cov))
+    if(keepSeed == TRUE){
+      return(as.data.frame(cov))
+    } else if(keepSeed == FALSE){
+      cov <- cov[, 2:ncol(cov)]
+      return(as.data.frame(cov))
+    }
   }
 }
   # check errors for very large factor levels
