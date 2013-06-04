@@ -297,6 +297,21 @@ test_that("Test that seed is preserved and identical in two data frames",{
   
 })
 
+try1 <- genFactor(25000, 4, nlevel=27, rho=0.3, seed=rnorm(25000))
+try2 <- genFactor(25000, 4, nlevel=100, rho=0.3, seed=rnorm(25000))
+try3 <- genFactor(25000, 4, nlevel=200, rho=0.3, seed=rnorm(25000))
+try4 <- genFactor(25000, 4, nlevel=400, rho=0.3, seed=rnorm(25000))
+
+
+
+test_that("Factor levels greater than 26 can be generated"), {
+  expect_equal(length(unique(try1)), 27)
+  expect_equal(length(unique(try2)), 100)
+  expect_equal(length(unique(try3)), 200)
+  expect_equal(length(unique(try4)), 400)
+}
+
+
 context("Generate formulas")
 
 set.seed(382)
