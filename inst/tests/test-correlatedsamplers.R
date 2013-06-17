@@ -10,11 +10,12 @@ b <- sapply(a, rnormcor, RHO1)
 c <- sapply(a, rnormcor, RHO2)
 d <- sapply(a, rnormcor, RHO3)
 
+tol <- .01
 
 test_that("Correlation is correct", {
-  expect_equivalent(cor(a,b), RHO1)
-  expect_equivalent(cor(a,c), RHO2)
-  expect_equivalent(cor(a,d), RHO3)
+  expect_that(abs(cor(a,b) - RHO1), is_less_than(tol))
+  expect_equivalent(abs(cor(a,c) - RHO2), is_less_than(tol))
+  expect_equivalent(abs(cor(a,d) - RHO3), is_less_than(tol))
   
 })
 
@@ -28,18 +29,19 @@ test_that("Direction is correct", {
 
 context("Chi-square")
 
-a <- rchisq(1000, df=12)
+a <- rnorm(1000)
 RHO1 <- 0.7
 RHO2 <- -0.7
 RHO3 <- 0.01
-b <- sapply(a, rchisqcor, RHO1)
-c <- sapply(a, rchisqcor, RHO2)
-d <- sapply(a, rchisqcor, RHO3)
+b <- rchisqcor(a, RHO1)
+c <- rchisqcor(a, RHO2)
+d <- rchisqcor(a, RHO3)
+tol <- .1
 
 test_that("Correlation of chi-square is correct", {
-  expect_equivalent(cor(a,b), RHO1)
-  expect_equivalent(cor(a,c), RHO2)
-  expect_equivalent(cor(a,d), RHO3)
+  expect_that(abs(cor(a,b) - RHO1), is_less_than(tol))
+  expect_that(abs(cor(a,c) - RHO2), is_less_than(tol))
+  expect_that(abs(cor(a,d) - RHO3), is_less_than(tol))
 })
 
 test_that("Direction is correct", {
@@ -58,12 +60,12 @@ RHO3 <- 0.01
 b <- sapply(a, rpoiscor, RHO1)
 c <- sapply(a, rpoiscor, RHO2)
 d <- sapply(a, rpoiscor, RHO3)
-
+tol <- 0.1
 
 test_that("Correlation of poisson is correct", {
-  expect_equivalent(cor(a,b), RHO1)
-  expect_equivalent(cor(a,c), RHO2)
-  expect_equivalent(cor(a,d), RHO3)
+  expect_that(abs(cor(a,b) - RHO1), is_less_than(tol))
+  expect_that(abs(cor(a,c) - RHO2), is_less_than(tol))
+  expect_that(abs(cor(a,d) - RHO3), is_less_than(tol))
 })
 
 test_that("Direction is correct", {
@@ -90,9 +92,9 @@ d <- runifcor.cor(a, RHO3)
 
 
 test_that("Correlation is correct", {
-  expect_equivalent(cor(a,b), RHO1)
-  expect_equivalent(cor(a,c), RHO2)
-  expect_equivalent(cor(a,d), RHO3)
+  expect_that(abs(cor(a,b) - RHO1), is_less_than(tol))
+  expect_that(abs(cor(a,c) - RHO2), is_less_than(tol))
+  expect_that(abs(cor(a,d) - RHO3), is_less_than(tol))
   
 })
 
@@ -120,9 +122,9 @@ d <- rweibullcor(a, RHO3)
 
 
 test_that("Correlation is correct", {
-  expect_equivalent(cor(a,b), RHO1)
-  expect_equivalent(cor(a,c), RHO2)
-  expect_equivalent(cor(a,d), RHO3)
+  expect_that(abs(cor(a,b) - RHO1), is_less_than(tol))
+  expect_that(abs(cor(a,c) - RHO2), is_less_than(tol))
+  expect_that(abs(cor(a,d) - RHO3), is_less_than(tol))
   
 })
 
@@ -151,9 +153,9 @@ d <- rgammacor(a, RHO3)
 
 
 test_that("Correlation is correct", {
-  expect_equivalent(cor(a,b), RHO1)
-  expect_equivalent(cor(a,c), RHO2)
-  expect_equivalent(cor(a,d), RHO3)
+  expect_that(abs(cor(a,b) - RHO1), is_less_than(tol))
+  expect_that(abs(cor(a,c) - RHO2), is_less_than(tol))
+  expect_that(abs(cor(a,d) - RHO3), is_less_than(tol))
   
 })
 
@@ -185,9 +187,9 @@ d <- rbinomcor(a, RHO3)
 # cor3 <- glm(d ~ 0 + a, family="binomial")
 
 test_that("Correlation is correct", {
-  expect_equivalent(cor(a,b), RHO1)
-  expect_equivalent(cor(a,c), RHO2)
-  expect_equivalent(cor(a,d), RHO3)
+  expect_that(abs(cor(a,b) - RHO1), is_less_than(tol))
+  expect_that(abs(cor(a,c) - RHO2), is_less_than(tol))
+  expect_that(abs(cor(a,d) - RHO3), is_less_than(tol))
   
 })
 

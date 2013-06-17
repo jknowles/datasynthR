@@ -15,6 +15,18 @@
 ##' @export 
 rnormcor <- function(x,rho) rnorm(1, rho*x, sqrt(1-rho^2))
 
+##' Generate a single variable from a distribution correlated with another distribution
+##'
+##' Allow user to draw from a random log-normal distribution correlated with a user specified distribution
+##' 
+##' @param x variable to draw from
+##' @param rho correlation coefficient between x and result of function
+##' @return a single numeric value drawn from a normal distribution correlated with x at the level of rho
+##' @details Rough estimate
+##' @author Jared E. Knowles
+##' @export 
+rlnormcor <- function(x,rho) rlnorm(1, rho*x, sqrt(1-rho^2))
+
 ##' Generate a vector from a normal distribution correlated with another distribution
 ##'
 ##' Allow user to draw from a random normal distribution correlated with a user specified vector
@@ -40,9 +52,16 @@ rnormcorV <- function(x, rho){
 ##' @details Rough estimate
 ##' @author Jared E. Knowles
 ##' @export 
-rchisqcor <- function(x, rho){
-  sign(rho)*sign(x)*sum(rep(sapply(x, rnormcor, rho=rho), times=length(x))^2)
+rchisqcor <- function(x, rho) {
+  require(MASS)
+  y <- sapply(x, rlnormcor, rho=rho)
+  y2 <- plnorm(y)
+  fit <- fitdistr(y, densfun="chi-squared", list(df=2, ncp=1), 
+                  upper=c(max(y) - 1, max(y) +1), lower=c(0.01, 1))
+  y3 <- sapply(y2, qchisq, df=fit$estimate[[1]], ncp=fit$estimate[[2]])
+  return(y3)
 }
+
 
 ##' Generate a vector from a Poisson distribution correlated with another distribution
 ##'

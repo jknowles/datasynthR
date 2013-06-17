@@ -304,12 +304,12 @@ try4 <- genFactor(25000, 4, nlevel=400, rho=0.3, seed=rnorm(25000))
 
 
 
-test_that("Factor levels greater than 26 can be generated"), {
+test_that("Factor levels greater than 26 can be generated", {
   expect_equal(length(unique(try1)), 27)
   expect_equal(length(unique(try2)), 100)
   expect_equal(length(unique(try3)), 200)
   expect_equal(length(unique(try4)), 400)
-}
+})
 
 
 context("Generate formulas")
@@ -343,11 +343,6 @@ mdf <- cbind(mdf, dat3)
 myF <- list(vars = sample(names(mdf), 7))
 
 genFormula(mdf, myF$vars)
-
-#myF$coefs <- rnorm(length(genFormula(mdf, myF$vars)[-1]), mean=0, sd=4)
-
-#genFormula(mdf, myF$vars)
-
 
 context("Generate binomial dependent variables")
 
