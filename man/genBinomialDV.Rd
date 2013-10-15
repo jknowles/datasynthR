@@ -2,7 +2,8 @@
 \alias{genBinomialDV}
 \title{Generate a binomial dependent variable}
 \usage{
-  genBinomialDV(df, form, errors, intercept)
+  genBinomialDV(df, form, errors, intercept,
+    type = c("binary", "response"))
 }
 \arguments{
   \item{df}{dataframe to generate the dependent variable

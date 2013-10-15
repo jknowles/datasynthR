@@ -5,8 +5,22 @@ Version: 0.1
 Date: 2013-05-20
 Author: Jared E. Knowles
 Maintainer: Jared E. Knowles <jknowles@gmail.com>
-Description: A collection of functions that allow users to generate synthetic data of known data types, with known associations among the elements in the dataset. This includes the ability to generate data frames with variables with known distributions, known correlation structures, and with variables as numeric, nominal, or ordinal types. Additionally, users can rescale variables to make them reflect meaningful real world data. Particularly useful for building reproducible test datasets during package development.
+Description: A collection of functions that allow users to generate synthetic
+    data of known data types, with known associations among the elements in the
+    dataset. This includes the ability to generate data frames with variables
+    with known distributions, known correlation structures, and with variables
+    as numeric, nominal, or ordinal types. Additionally, users can rescale
+    variables to make them reflect meaningful real world data. Particularly
+    useful for building reproducible test datasets during package development.
 License: GPL-3
-Depends: R (>= 2.15.1), MASS, reshape
-Imports: 
-Suggests: testthat
+Depends:
+    R (>= 2.15.1),
+    MASS,
+    reshape
+Suggests:
+    testthat
+Collate:
+    'correlatedsamplers.R'
+    'generators.R'
+    'helpers.R'
+    'missingness.R'

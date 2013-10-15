@@ -1,0 +1,30 @@
+\name{MCARcheck}
+\alias{MCARcheck}
+\title{Are missing values in two vectors correlated?}
+\usage{
+  MCARcheck(x, y)
+}
+\arguments{
+  \item{x}{a vector of any class that contains NA values}
+
+  \item{y}{a vector of any class that contains NA values}
+}
+\value{
+  the proportion of x that are NA values
+}
+\description{
+  Return the GK test
+}
+\details{
+  This function forces x and y to factors of missing and
+  non-missing elements and then performs a GK test on those
+  factors to determine if they are correlated, to what
+  degree, and if this is statistically significant.
+}
+\note{
+  Yadda yadda yadda
+}
+\author{
+  Jared E. Knowles
+}
+

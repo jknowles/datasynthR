@@ -2,7 +2,7 @@
 \alias{genFactor}
 \title{Generate a dataframe of unordered factors with known associations}
 \usage{
-  genFactor(n, k, nlevel, rho, seed, ...)
+  genFactor(n, k, nlevel, rho, seed, keepSeed, ...)
 }
 \arguments{
   \item{n}{Number of rows in the resulting dataframe}
