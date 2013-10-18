@@ -1,4 +1,16 @@
 ################################################################################
+################################################################################
+# Test the direction and strength of correlations for various combinations of 
+#  distributions
+# Start with normal seed and correlations from then
+# Other distributions:
+#    poisson
+#    weibull
+#    uniform
+#    gamma
+#    beta
+#    binomial
+#    chisq
 
 context("Correlations starting with a normally distributed variable")
 
@@ -206,3 +218,6 @@ test_that("Result is binomial distributed", {
   expect_equivalent(length(table(d)), 2)
 
 })
+
+
+#context("Correlations starting with a normally distributed variable")

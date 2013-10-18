@@ -47,13 +47,13 @@ genNumeric <- function(n, k, rho, seed, pattern){
       type <- match.arg(pattern$dist[i-1], c("norm", "binom", "chisq", "pois", "unif", 
                                            "weibull", "gamma"))
       cov[, i]  <- switch(type, 
-                          norm = rnormcorV(cov[, 1], rho=pattern$rho[i-1]),
-                          binom = rbinomcor(cov[, 1], rho=pattern$rho[i-1]),
-                          chisq = rchisqcor(cov[, 1], rho=pattern$rho[i-1]), 
-                          pois = rpoiscor(cov[, 1], rho=pattern$rho[i-1]), 
-                          unif = runifcor.cor(cov[, 1], rho=pattern$rho[i-1]),
-                          weibull= rweibullcor(cov[, 1], rho=pattern$rho[i-1]), 
-                          gamma = rgammacor(cov[, 1], rho=pattern$rho[i-1]))
+                          norm = rnormcorV(cov[, i-1], rho=pattern$rho[i-1]),
+                          binom = rbinomcor(cov[, i-1], rho=pattern$rho[i-1]),
+                          chisq = rchisqcor(cov[, i-1], rho=pattern$rho[i-1]), 
+                          pois = rpoiscor(cov[, i-1], rho=pattern$rho[i-1]), 
+                          unif = runifcor.cor(cov[, i-1], rho=pattern$rho[i-1]),
+                          weibull= rweibullcor(cov[, i-1], rho=pattern$rho[i-1]), 
+                          gamma = rgammacor(cov[, i-1], rho=pattern$rho[i-1]))
     }
     if(!is.null(pattern$names)){
       cov <- as.data.frame(cov)
@@ -72,6 +72,7 @@ genNumeric <- function(n, k, rho, seed, pattern){
       }
       return(cov)
     } else if(!missing(pattern)){
+      pattern$seed <- seed
       cov <- matrix(nrow = n, ncol = length(pattern$dist))
       #cov <- cbind(rnorm(nrow(cov)), cov)
       
@@ -79,13 +80,13 @@ genNumeric <- function(n, k, rho, seed, pattern){
         type <- match.arg(pattern$dist[i], c("norm", "binom", "chisq", "pois", "unif", 
                                                "weibull", "gamma"))
         cov[, i]  <- switch(type, 
-                            norm = rnormcorV(pattern$seed[,i], rho=pattern$rho[i]),
-                            binom = rbinomcor(pattern$seed[,i], rho=pattern$rho[i]),
-                            chisq = rchisqcor(pattern$seed[,i], rho=pattern$rho[i]), 
-                            pois = rpoiscor(pattern$seed[,i], rho=pattern$rho[i]), 
-                            unif = runifcor.cor(pattern$seed[,i], rho=pattern$rho[i]),
-                            weibull= rweibullcor(pattern$seed[,i], rho=pattern$rho[i]), 
-                            gamma = rgammacor(pattern$seed[,i], rho=pattern$rho[i]))
+                            norm = rnormcorV(pattern$seed, rho=pattern$rho[i]),
+                            binom = rbinomcor(pattern$seed, rho=pattern$rho[i]),
+                            chisq = rchisqcor(pattern$seed, rho=pattern$rho[i]), 
+                            pois = rpoiscor(pattern$seed, rho=pattern$rho[i]), 
+                            unif = runifcor.cor(pattern$seed, rho=pattern$rho[i]),
+                            weibull= rweibullcor(pattern$seed, rho=pattern$rho[i]), 
+                            gamma = rgammacor(pattern$seed, rho=pattern$rho[i]))
       }
       if(!is.null(pattern$names)){
         cov <- as.data.frame(cov)
