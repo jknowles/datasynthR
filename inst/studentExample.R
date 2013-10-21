@@ -23,26 +23,16 @@ N <- 100000
 struc1 <- list(names=c("read", "math", "attend", "discipline", "mobility"),
               dist = c("norm", "norm", "gamma", "pois", "pois"), 
               rho = c(0.73, 0.8, 0.4, -0.5, -0.3))
-
-struc2 <- list(names=c("read", "math", "attend", "discipline", "mobility"),
-               dist = c("norm", "norm", "gamma", "pois", "pois"), 
-               rho = c(0.73, 0.65, 0.3, -0.2, -0.1))
+# 
+# struc2 <- list(names=c("read", "math", "attend", "discipline", "mobility"),
+#                dist = c("norm", "norm", "gamma", "pois", "pois"), 
+#                rho = c(0.73, 0.65, 0.3, -0.2, -0.1))
 
 
 studat <- genNumeric(N, pattern=struc1)
 
-studat2 <- genNumeric(N, pattern=struc2, seed = studat[, 3])
-
-
-
-
-
-cor(studat[, 1], studat[, 2])
-cor(studat[, 1], studat[, 3])
-cor(studat[, 1], studat[, 4])
-cor(studat[, 1], studat[, 5])
-cor(studat[, 1], studat[, 6])
-cor(studat[, 1], studat[, 7])
+# studat2 <- genNumeric(N, pattern=struc2, seed = studat[, 3])
+# 
 
 
 myFactors <- genFactor(N, 4, nlevel=4, rho=0.3)
@@ -53,12 +43,13 @@ studat <- cbind(studat, myFactors)
 myF <- list(vars=c("read", "math", "attend", "discipline", "mobility"), 
             coefs=c(4, -2, 1.2, -7, 2))
 
-studat$treat <- genBinomialDV(studat, form=myF, intercept=-225, type="binary")
+studat$treat <- genBinomialDV(studat, form=myF, intercept=-7, type="binary")
 
 schools <- genFactor(N, 1, 200, 0.1, seed=studat$seed, keepSeed=FALSE)
 studat$schools <- schools
 names(studat)[12] <- "schools"
 
+studat$ever_treat <- studat$treat
 
 fuzzy <- function(x) x + rnorm(1,0.1,0.1)
 
@@ -101,6 +92,12 @@ studat$year <- 1
 sids <- 100000:600000
 
 studat$sid <- sample(sids, nrow(studat), replace=FALSE)
+studat$year <- 2
+
+tmp <- studat
+tmp$year <- 1
+
+
 
 ################################################################################
 ## Add another year of data for all students

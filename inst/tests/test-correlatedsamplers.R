@@ -26,8 +26,8 @@ tol <- .01
 
 test_that("Correlation is correct", {
   expect_that(abs(cor(a,b) - RHO1), is_less_than(tol))
-  expect_equivalent(abs(cor(a,c) - RHO2), is_less_than(tol))
-  expect_equivalent(abs(cor(a,d) - RHO3), is_less_than(tol))
+  expect_that(abs(cor(a,c) - RHO2), is_less_than(tol))
+  expect_that(abs(cor(a,d) - RHO3), is_less_than(tol))
   
 })
 
@@ -65,14 +65,15 @@ test_that("Direction is correct", {
 
 context("Poisson")
 
-a <- rnorm(1000)
+a <- rnorm(5000)
 RHO1 <- 0.7
 RHO2 <- -0.7
 RHO3 <- 0.01
-b <- sapply(a, rpoiscor, RHO1)
-c <- sapply(a, rpoiscor, RHO2)
-d <- sapply(a, rpoiscor, RHO3)
-tol <- 0.1
+
+b <- rpoiscor(a, RHO1)
+c <- rpoiscor(a, RHO2)
+d <- rpoiscor(a, RHO3)
+tol <- 0.05
 
 test_that("Correlation of poisson is correct", {
   expect_that(abs(cor(a,b) - RHO1), is_less_than(tol))

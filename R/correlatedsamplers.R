@@ -74,12 +74,14 @@ rchisqcor <- function(x, rho) {
 ##' @author Jared E. Knowles
 ##' @export 
 rpoiscor <- function(x, rho){
-  tmp <- sapply(x, rnormcor, rho=rho)
-  b <- round(tmp,digits=0)
-  b <- b + abs(min(b))
-  b <- b^3
-  return(b)
+  # consider allowing a meanshift to occur at user request
+  y <- sapply(x, rlnormcor, rho=rho)
+  y2 <- plnorm(y)
+  fit <- fitdistr(y, densfun="Poisson")
+  y3 <- sapply(y2, qpois, lambda=fit$estimate[[1]])
+  return(y3)
 } 
+
 
 ##' Generate a vector from a uniform distribution correlated with another distribution
 ##'
@@ -155,6 +157,6 @@ rbinomcor <- function(x, rho){
   require(MASS)
   y <- sapply(x, rnormcor, rho=rho)
   y2 <- pnorm(y)
-  #pr <- 1/(1+exp(-y2))
-  y <- sapply(y2, qbinom, size=1, prob=abs(rho))
+  pr <- 1/(1+exp(-y2))
+  y <- sapply(pr, qbinom, size=1, prob=abs(rho))
 }
