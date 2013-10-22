@@ -34,12 +34,31 @@ rlnormcor <- function(x,rho) rlnorm(1, rho*x, sqrt(1-rho^2))
 ##' @param x variable to draw from
 ##' @param rho correlation coefficient between x and result of function
 ##' @return a vector of the same length as x drawn from a normal distribution correlated with x at the level of rho
-##' @details Rough estimate
+##' @details Rough estimate, biased by known amount for now
 ##' @author Jared E. Knowles
 ##' @export 
 rnormcorV <- function(x, rho){
-  tmp <- sapply(x, rnormcor, rho=rho)
-  return(tmp)
+#   powerNeg <- function(x, p) (abs(x)^(1/p)) * sign(x)
+#   dist <- rho - 0.5
+#   steps <- qpois(dist, lambda=6)
+  y <- sapply(x, rnormcor, rho=rho)
+#   for(i in 1:steps){
+#   y <- sapply(y, rnormcor, rho=powerNeg(rho, i))
+#   }
+#   
+#   require(MASS)
+#   y <- sapply(x, rnormcor, rho=rho)
+#   y <- sapply(y, rnormcor, rho=sqrtNeg(abs(rho)))
+#   y <- sapply(y, rnormcor, rho=sqrtNeg(sqrtNeg(abs(rho))))
+#   y <- sapply(y, rnormcor, rho=sqrtNeg(sqrtNeg(sqrtNeg(abs(rho)))))
+#   y2 <- pnorm(y)
+#   fit <- fitdistr(y, densfun="normal")
+#   y3 <- sapply(y2, qnorm, mean=fit$estimate[[1]], sd=fit$estimate[[2]])
+#   # clean up extreme values
+#   y3[!is.finite(y3) & sign(y3) == 1] <- max(y3[is.finite(y3)], na.rm=T)
+#   y3[!is.finite(y3) & sign(y3) == -1] <- min(y3[is.finite(y3)], na.rm=T)
+#   y3 <- scale(y3, center=TRUE, scale=TRUE)
+  return(y)
 }
 
 ##' Generate a vector from a chi-square distribution correlated with another distribution

@@ -37,6 +37,30 @@ test_that("Direction is correct", {
   expect_equal(sign(cor(a,d)), sign(RHO3))
 })
 
+context("Normal Vector")
+
+RHO1 <- 0.7
+RHO2 <- -0.7
+RHO3 <- 0.01
+a <- rnorm(100000)
+b <- rnormcorV(a, RHO1)
+c <- rnormcorV(a, RHO2)
+d <- rnormcorV(a, RHO3)
+
+tol <- .01
+
+test_that("Correlation is correct", {
+  expect_that(abs(cor(a,b) - RHO1), is_less_than(tol))
+  expect_that(abs(cor(a,c) - RHO2), is_less_than(tol))
+  expect_that(abs(cor(a,d) - RHO3), is_less_than(tol))
+  
+})
+
+test_that("Direction is correct", {
+  expect_equal(sign(cor(a,b)), sign(RHO1))
+  expect_equal(sign(cor(a,c)), sign(RHO2))
+  expect_equal(sign(cor(a,d)), sign(RHO3))
+})
 
 
 context("Chi-square")
@@ -156,8 +180,8 @@ test_that("Result is uniformly distributed", {
 context("Gamma")
 
 
-RHO1 <- 0.7
-RHO2 <- -0.7
+RHO1 <- 0.3
+RHO2 <- -0.3
 RHO3 <- 0.05
 a <- rnorm(1000)
 b <- rgammacor(a, RHO1)

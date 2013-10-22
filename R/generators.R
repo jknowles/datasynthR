@@ -34,52 +34,52 @@
 genNumeric <- function(n, k, rho, seed, pattern){
   if(missing(seed)){
   if(missing(pattern)){
-  cov <- array(runif(n*k, -2, 2), dim=c(n, k))
+  covT <- array(runif(n*k, -2, 2), dim=c(n, k))
    for(i in 2:k){
-    cov[, i] <- sapply(cov[, i-1], rnormcor, rho=rho)
+    covT[, i] <- sapply(covT[, i-1], rnormcor, rho=rho)
   }
-  return(cov)
+  return(covT)
   } else if(!missing(pattern)){
-    cov <- matrix(nrow = n, ncol = length(pattern$dist))
-    cov <- cbind(rnorm(nrow(cov)), cov)
+    covT <- matrix(nrow = n, ncol = length(pattern$dist))
+    covT <- cbind(rnorm(nrow(covT)), covT)
     
-    for(i in 2:ncol(cov)){
+    for(i in 2:ncol(covT)){
       type <- match.arg(pattern$dist[i-1], c("norm", "binom", "chisq", "pois", "unif", 
                                            "weibull", "gamma"))
-      cov[, i]  <- switch(type, 
-                          norm = rnormcorV(cov[, i-1], rho=pattern$rho[i-1]),
-                          binom = rbinomcor(cov[, i-1], rho=pattern$rho[i-1]),
-                          chisq = rchisqcor(cov[, i-1], rho=pattern$rho[i-1]), 
-                          pois = rpoiscor(cov[, i-1], rho=pattern$rho[i-1]), 
-                          unif = runifcor.cor(cov[, i-1], rho=pattern$rho[i-1]),
-                          weibull= rweibullcor(cov[, i-1], rho=pattern$rho[i-1]), 
-                          gamma = rgammacor(cov[, i-1], rho=pattern$rho[i-1]))
+      covT[, i]  <- switch(type, 
+                          norm = rnormcorV(covT[, i-1], rho=pattern$rho[i-1]),
+                          binom = rbinomcor(covT[, i-1], rho=pattern$rho[i-1]),
+                          chisq = rchisqcor(covT[, i-1], rho=pattern$rho[i-1]), 
+                          pois = rpoiscor(covT[, i-1], rho=pattern$rho[i-1]), 
+                          unif = runifcor.cor(covT[, i-1], rho=pattern$rho[i-1]),
+                          weibull= rweibullcor(covT[, i-1], rho=pattern$rho[i-1]), 
+                          gamma = rgammacor(covT[, i-1], rho=pattern$rho[i-1]))
     }
     if(!is.null(pattern$names)){
-      cov <- as.data.frame(cov)
-      names(cov) <- c("seed", pattern$names)
-      return(cov)
+      covT <- as.data.frame(covT)
+      names(covT) <- c("seed", pattern$names)
+      return(covT)
     }
-    return(as.data.frame(cov))
+    return(as.data.frame(covT))
   }
   } else if(!missing(seed)){
     if(missing(pattern)){
       if(length(seed) != n) stop("Constant seed produces nonsense correlations.")
-      cov <- array(runif(n*k, -2, 2), dim=c(n, k))
-      cov <- cbind(seed, cov)
+      covT <- array(runif(n*k, -2, 2), dim=c(n, k))
+      covT <- cbind(seed, covT)
       for(i in 1:k+1){
-        cov[, i] <- sapply(cov[, 1], rnormcor, rho=rho)
+        covT[, i] <- sapply(covT[, 1], rnormcor, rho=rho)
       }
-      return(cov)
+      return(covT)
     } else if(!missing(pattern)){
       pattern$seed <- seed
-      cov <- matrix(nrow = n, ncol = length(pattern$dist))
-      #cov <- cbind(rnorm(nrow(cov)), cov)
+      covT <- matrix(nrow = n, ncol = length(pattern$dist))
+      #covT <- cbind(rnorm(nrow(covT)), covT)
       
-      for(i in 1:ncol(cov)){
+      for(i in 1:ncol(covT)){
         type <- match.arg(pattern$dist[i], c("norm", "binom", "chisq", "pois", "unif", 
                                                "weibull", "gamma"))
-        cov[, i]  <- switch(type, 
+        covT[, i]  <- switch(type, 
                             norm = rnormcorV(pattern$seed, rho=pattern$rho[i]),
                             binom = rbinomcor(pattern$seed, rho=pattern$rho[i]),
                             chisq = rchisqcor(pattern$seed, rho=pattern$rho[i]), 
@@ -89,11 +89,11 @@ genNumeric <- function(n, k, rho, seed, pattern){
                             gamma = rgammacor(pattern$seed, rho=pattern$rho[i]))
       }
       if(!is.null(pattern$names)){
-        cov <- as.data.frame(cov)
-        names(cov) <- c(pattern$names)
-        return(cov)
+        covT <- as.data.frame(covT)
+        names(covT) <- c(pattern$names)
+        return(covT)
       }
-      return(as.data.frame(cov))
+      return(as.data.frame(covT))
     }
     
   }
@@ -194,45 +194,45 @@ genFactor <- function(n, k, nlevel, rho, seed, keepSeed, ...){
     smp <- letters
   }
   if(missing(seed)){
-  cov <- genNumeric(n, k, rho, ...)
-  cov <- as.data.frame(cov)
-  for(i in 1:ncol(cov)){
-    cov[, i] <- cut(cov[, i], breaks=nlevel)
-    draw <- length(unique(cov[, i]))
-    cov[, i] <- factor(cov[, i], labels=sample(draw, nlevel))
+  covT <- genNumeric(n, k, rho, ...)
+  covT <- as.data.frame(covT)
+  for(i in 1:ncol(covT)){
+    covT[, i] <- cut(covT[, i], breaks=nlevel)
+    draw <- length(unique(covT[, i]))
+    covT[, i] <- factor(covT[, i], labels=sample(draw, nlevel))
   }
   if(keepSeed == TRUE){
-    return(as.data.frame(cov))
+    return(as.data.frame(covT))
   } else if(keepSeed == FALSE){
-    cov <- cov[, 2:ncol(cov)]
-    return(as.data.frame(cov))
+    covT <- covT[, 2:ncol(covT)]
+    return(as.data.frame(covT))
   }
   }
   if(!missing(seed)){
     if(class(seed)=="numeric"){
-    cov <- genNumeric(n, k, rho, seed)
-    cov <- as.data.frame(cov)
-    for(i in 1:ncol(cov)){
-      cov[, i] <- cut(cov[, i], breaks=nlevel)
-      draw <- length(unique(cov[, i]))
-      cov[, i] <- factor(cov[, i], labels=sample(smp, draw))
+    covT <- genNumeric(n, k, rho, seed)
+    covT <- as.data.frame(covT)
+    for(i in 1:ncol(covT)){
+      covT[, i] <- cut(covT[, i], breaks=nlevel)
+      draw <- length(unique(covT[, i]))
+      covT[, i] <- factor(covT[, i], labels=sample(smp, draw))
     }
     } else if(class(seed)!="numeric"){
       seed.tmp <- as.numeric(as.factor(seed))
-      cov <- genNumeric(n, k, rho, seed.tmp)
-      cov <- as.data.frame(cov)
-      cov[, 1] <- seed
-      for(i in 2:ncol(cov)){
-        cov[, i] <- cut(cov[, i], breaks=nlevel)
-        draw <- length(unique(cov[, i]))
-        cov[, i] <- factor(cov[, i], labels=sample(smp, draw))
+      covT <- genNumeric(n, k, rho, seed.tmp)
+      covT <- as.data.frame(covT)
+      covT[, 1] <- seed
+      for(i in 2:ncol(covT)){
+        covT[, i] <- cut(covT[, i], breaks=nlevel)
+        draw <- length(unique(covT[, i]))
+        covT[, i] <- factor(covT[, i], labels=sample(smp, draw))
       }
     }
     if(keepSeed == TRUE){
-      return(as.data.frame(cov))
+      return(as.data.frame(covT))
     } else if(keepSeed == FALSE){
-      cov <- cov[, 2:ncol(cov)]
-      return(as.data.frame(cov))
+      covT <- covT[, 2:ncol(covT)]
+      return(as.data.frame(covT))
     }
   }
 }
