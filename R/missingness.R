@@ -132,7 +132,7 @@ MCARcheck.df <- function(df){
 ##' 
 ##' @param results results from MCARcheck.df
 ##' @param p threshold for statistical significance on the gamma
-##' @print Option to print out results
+##' @param print Option to print out results
 ##' @return summary of dependencies among missing values in dataset
 ##' @export
 ##' @author Jared E. Knowles

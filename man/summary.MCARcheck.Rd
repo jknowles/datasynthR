@@ -9,6 +9,8 @@
 
   \item{p}{threshold for statistical significance on the
   gamma}
+
+  \item{print}{Option to print out results}
 }
 \value{
   summary of dependencies among missing values in dataset

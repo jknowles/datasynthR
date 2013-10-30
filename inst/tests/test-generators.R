@@ -36,8 +36,8 @@ test_that("Correlations are correct", {
 context("User Controlled Random Correlation Matrices")
 
 
-struc <- list(dist = c("norm", "binom", "chisq", "pois", "unif", 
-                         "weibull", "gamma"), 
+struc <- list(dist = c("norm", "binom", "chisq", "pois", "weibull", 
+                         "pois", "gamma"), 
                 rho = c(-.05, -.4, 0.3, 0.9, .03, -.6, -.2))
 
 

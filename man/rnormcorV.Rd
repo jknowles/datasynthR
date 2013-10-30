@@ -19,7 +19,7 @@
   correlated with a user specified vector
 }
 \details{
-  Rough estimate
+  Rough estimate, biased by known amount for now
 }
 \author{
   Jared E. Knowles
