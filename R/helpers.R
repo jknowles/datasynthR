@@ -92,8 +92,14 @@ gammaGK <- function(x, y=NULL, print=FALSE){
   invisible(NULL)
 }
 
-##' Cut out duplicate values
+##' Cut out duplicate values in a dataframe
 ##'
+##' Estimate the correlation between two unordered factor variables using the Goodman and Kruskal gamma statistic 
+##' 
+##' @param tmpdf a dataframe from which to cull
+##' @return The dataframe with duplciated values culled from it
+##' @note Yadda yadda yadda
+##' @author Jared E. Knowles
 cull <- function(tmpdf){
   tmpdf$concat_fw <- paste(tmpdf$Var1, tmpdf$Var2, sep="")
   tmpdf$concat_bw <- paste(tmpdf$Var2, tmpdf$Var1, sep="")

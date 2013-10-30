@@ -37,6 +37,12 @@ rlnormcor <- function(x,rho) rlnorm(1, rho*x, sqrt(1-rho^2))
 ##' @details Rough estimate, biased by known amount for now
 ##' @author Jared E. Knowles
 ##' @export 
+##' @examples
+##' x <- rnorm(1000, 1, 1)
+##' y <- rnormcorV(x, 0.2)
+##' cor(x,y) # very close to 0.2
+##' mean(y) # close to 0
+##' sd(y)   # close to 1
 rnormcorV <- function(x, rho){
 #   powerNeg <- function(x, p) (abs(x)^(1/p)) * sign(x)
 #   dist <- rho - 0.5
@@ -71,6 +77,12 @@ rnormcorV <- function(x, rho){
 ##' @details Rough estimate
 ##' @author Jared E. Knowles
 ##' @export 
+##' @examples
+##' x <- rnorm(1000, 1, 1)
+##' y <- rchisqcor(x, 0.2)
+##' cor(x,y) # very close to 0.2
+##' mean(y) 
+##' sd(y)   
 rchisqcor <- function(x, rho) {
   require(MASS)
   y <- sapply(x, rlnormcor, rho=rho)
@@ -92,10 +104,17 @@ rchisqcor <- function(x, rho) {
 ##' @details Rough estimate
 ##' @author Jared E. Knowles
 ##' @export 
+##' @examples
+##' x <- rnorm(1000, 1, 1)
+##' y <- rpoiscor(x, 0.2)
+##' cor(x,y) # very close to 0.2
+##' mean(y) 
+##' sd(y)   
 rpoiscor <- function(x, rho){
   # consider allowing a meanshift to occur at user request
   y <- sapply(x, rlnormcor, rho=rho)
   y2 <- plnorm(y)
+  y <- round(y, digits=0)
   fit <- fitdistr(y, densfun="Poisson")
   y3 <- sapply(y2, qpois, lambda=fit$estimate[[1]])
   return(y3)
@@ -114,6 +133,12 @@ rpoiscor <- function(x, rho){
 ##' @export 
 ##' @note runif only works coming from uniform data
 ##' @references modified from Eric Neuwirth \url{http://r.789695.n4.nabble.com/Generating-uniformly-distributed-correlated-data-td3314905.html}
+##' @examples
+##' x <- runif(1000)
+##' y <- runifcor.cor(x, 0.2)
+##' cor(x,y) # very close to 0.2
+##' mean(y) 
+##' sd(y)   
 runifcor.cor <- function(x, rho){
   hw <- function(r){ 
     tmp <- (3-sqrt(1+8*abs(r)))/4 
@@ -135,11 +160,17 @@ runifcor.cor <- function(x, rho){
 ##' @details Rough estimate
 ##' @author Jared E. Knowles
 ##' @export 
+##' @examples
+##' x <- rnorm(1000)
+##' y <- rweibullcor(x, 0.2)
+##' cor(x,y) # very close to 0.2
+##' mean(y) 
+##' sd(y)  
 rweibullcor <- function(x, rho) {
   require(MASS)
   y <- sapply(x, rnormcor, rho=rho)
   y2 <- pnorm(y)
-  fit <- fitdistr(y2, densfun="weibull")
+  fit <- try(fitdistr(y2, densfun="weibull"))
   y3 <- sapply(y2, qweibull, shape=fit$estimate[[1]], scale=fit$estimate[[2]])
 }
 
@@ -154,6 +185,12 @@ rweibullcor <- function(x, rho) {
 ##' @details Rough estimate
 ##' @author Jared E. Knowles
 ##' @export 
+##' @examples
+##' x <- rnorm(1000)
+##' y <- rgammacor(x, 0.2)
+##' cor(x,y) # very close to 0.2
+##' mean(y) 
+##' sd(y)  
 rgammacor <- function(x, rho){
   require(MASS)
   y <- sapply(x, rnormcor, rho=rho)

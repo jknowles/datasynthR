@@ -5,6 +5,7 @@ source("R/generators.R")
 source("R/missingness.R")
 source("R/helpers.R")
 
-test_file("inst/tests/test-generators.R")
 test_file("inst/tests/test-correlatedsamplers.R")
+test_file("inst/tests/test-generators.R")
 test_file("inst/tests/test-missingness.R")
+test_file("inst/tests/test-DGP.R")

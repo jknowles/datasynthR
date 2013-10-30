@@ -36,16 +36,16 @@ test_that("Correlations are correct", {
 context("User Controlled Random Correlation Matrices")
 
 
-struc <- list(dist = c("norm", "binom", "chisq", "pois", "weibull", 
-                         "pois", "gamma"), 
-                rho = c(-.05, -.4, 0.3, 0.9, .03, -.6, -.2))
+struc <- list(dist = c("norm", "norm", "pois"), 
+                rho = c(-.05, -.4, 0.4),
+              names = c("score", "score2", "accept"))
 
 
 N <- 5000
 
 covmat <- genNumeric(N, pattern=struc)
 
-test_that("Dimensions are correct", {
+test_that("Dimensions are correct in simple case", {
   expect_equal(nrow(covmat), N)
   expect_equal(ncol(covmat), length(struc$dist))
   expect_is(covmat, "data.frame")
@@ -55,26 +55,49 @@ test_that("Dimensions are correct", {
 err <- sum(abs(cor(covmat)[2:ncol(covmat),1] - struc$rho[2:length(struc$rho)])) / length(struc$rho)
 tol <- sum(abs(struc$rho[2:length(struc$rho)]) *.05)
 
-test_that("Correlations are correct", {
+test_that("Correlations are correct in simple case", {
   expect_that(err, is_less_than(tol))
 })
 
+test_that("Names get passed properly in simple case", {
+  expect_equivalent(names(covmat), struc$names)
+  expect_is(covmat, "data.frame")
+  
+})
 
+context("User Controlled Random Correlation Matrices Complex")
 
-struc2 <- list(dist = c("norm", "binom", "chisq", "pois", "unif", 
+struc2 <- list(dist = c("norm", "chisq", "pois", "norm", 
                        "weibull", "gamma"), 
-              rho = c(-.05, -.4, 0.3, 0.9, .03, -.6, -.2),
+              rho = c(-.05, -.4, 0.3, 0.9, .03, -.6),
               names = c("score", "accept", "score2", "days", "days2", 
-                        "luck", "time"))
+                        "luck"))
 
 covmat <- genNumeric(N, pattern=struc2)
 
-test_that("Names get passed properly", {
+
+
+test_that("Dimensions are correct in complex case", {
+  expect_equal(nrow(covmat), N)
+  expect_equal(ncol(covmat), length(struc2$dist))
+  expect_is(covmat, "data.frame")
+  
+})
+
+err <- sum(abs(cor(covmat)[2:ncol(covmat),1] - struc$rho[2:length(struc2$rho)])) / length(struc2$rho)
+tol <- sum(abs(struc2$rho[2:length(struc2$rho)]) *.05)
+
+test_that("Correlations are correct in complex case", {
+  expect_that(err, is_less_than(tol))
+})
+
+test_that("Names get passed properly in complex case", {
   expect_equivalent(names(covmat), struc2$names)
   expect_is(covmat, "data.frame")
   
 })
 
+              
 context("User specified Seed is Correct")
 
 N <- 1000
@@ -84,14 +107,15 @@ RHO2 <- -0.9
 S1 <- rnorm(N)
 S2 <- runif(N)
 
-struc3 <- list(dist = c("norm", "binom", "chisq", "pois", "unif", 
-                        "weibull", "gamma"), 
-               rho = c(-.05, -.4, 0.3, 0.9, .03, -.6, -.2),
-               names = c("score", "accept", "score2", "days", "days2", 
-                         "luck", "time"),
-               seed = c(runif(N), rnorm(N), rpois(N, 7), rpois(N, 3), rgamma(N, shape=2), 
-                        runif(N)))
 
+
+struc3 <- list(dist = c("norm", "chisq", "pois", "norm", 
+                        "weibull", "gamma"), 
+               rho = c(-.05, -.4, 0.3, 0.9, .03, -.6),
+               names = c("score", "accept", "score2", "days", "days2", 
+                         "luck"),
+               seed = c(runif(N), rpois(N, 7), rpois(N, 3), rgamma(N, shape=2), 
+                        runif(N)))
 
 
 covmat <- genNumeric(N, K, rho=RHO1, seed=S1)
@@ -123,7 +147,7 @@ test_that("Function gets the right answer!", {
 context("Test user specified seed in patterned structure")
 
 seeds <- genNumeric(1000, 6, rho=0.3)
-struc <- list(dist=c("norm", "norm", "unif", "pois", "pois", "gamma", 
+struc <- list(dist=c("norm", "norm", "chisq", "pois", "pois", "gamma", 
                      "weibull"), 
               rho=c(0.7, 0.3, -0.5, 0.3, -0.8, 0.05, 0.7), 
               names=c("test1", "test2", "noise", "daysattended", 

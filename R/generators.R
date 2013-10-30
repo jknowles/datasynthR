@@ -72,21 +72,35 @@ genNumeric <- function(n, k, rho, seed, pattern){
       }
       return(covT)
     } else if(!missing(pattern)){
-      pattern$seed <- seed
+      seed <- ifelse(is.logical(seed), pattern$seed, seed)
       covT <- matrix(nrow = n, ncol = length(pattern$dist))
       #covT <- cbind(rnorm(nrow(covT)), covT)
-      
-      for(i in 1:ncol(covT)){
-        type <- match.arg(pattern$dist[i], c("norm", "binom", "chisq", "pois", "unif", 
+      if(dim(pattern$seed)[2] < 2){
+          for(i in 1:ncol(covT)){
+          type <- match.arg(pattern$dist[i], c("norm", "binom", "chisq", "pois", "unif", 
                                                "weibull", "gamma"))
-        covT[, i]  <- switch(type, 
-                            norm = rnormcorV(pattern$seed, rho=pattern$rho[i]),
-                            binom = rbinomcor(pattern$seed, rho=pattern$rho[i]),
-                            chisq = rchisqcor(pattern$seed, rho=pattern$rho[i]), 
-                            pois = rpoiscor(pattern$seed, rho=pattern$rho[i]), 
-                            unif = runifcor.cor(pattern$seed, rho=pattern$rho[i]),
-                            weibull= rweibullcor(pattern$seed, rho=pattern$rho[i]), 
-                            gamma = rgammacor(pattern$seed, rho=pattern$rho[i]))
+          covT[, i]  <- switch(type, 
+                               norm = rnormcorV(pattern$seed, rho=pattern$rho[i]),
+                               binom = rbinomcor(pattern$seed, rho=pattern$rho[i]),
+                               chisq = rchisqcor(pattern$seed, rho=pattern$rho[i]), 
+                               pois = rpoiscor(pattern$seed, rho=pattern$rho[i]), 
+                               unif = runifcor.cor(pattern$seed, rho=pattern$rho[i]),
+                               weibull= rweibullcor(pattern$seed, rho=pattern$rho[i]), 
+                               gamma = rgammacor(pattern$seed, rho=pattern$rho[i]))
+        }
+      } else if(dim(pattern$seed)[2] > 1){
+        for(i in 1:ncol(covT)){
+          type <- match.arg(pattern$dist[i], c("norm", "binom", "chisq", "pois", "unif", 
+                                               "weibull", "gamma"))
+          covT[, i]  <- switch(type, 
+                               norm = rnormcorV(pattern$seed[,i], rho=pattern$rho[i]),
+                               binom = rbinomcor(pattern$seed[,i], rho=pattern$rho[i]),
+                               chisq = rchisqcor(pattern$seed[,i], rho=pattern$rho[i]), 
+                               pois = rpoiscor(pattern$seed[,i], rho=pattern$rho[i]), 
+                               unif = runifcor.cor(pattern$seed[,i], rho=pattern$rho[i]),
+                               weibull= rweibullcor(pattern$seed[,i], rho=pattern$rho[i]), 
+                               gamma = rgammacor(pattern$seed[,i], rho=pattern$rho[i]))
+        }
       }
       if(!is.null(pattern$names)){
         covT <- as.data.frame(covT)
@@ -113,8 +127,8 @@ genNumeric <- function(n, k, rho, seed, pattern){
 ##' @note Yadda yadda yadda
 ##' @export
 ##' @author Jared E. Knowles
-##' @note Currently it can be easy for the user to build a formulae that results in all 0 or 1 results. 
-##' Use intercept to adjust accordingly. Additionally, coefficient scaes don't make sense at the moment. 
+##' @note Currently it can be easy for the user to build a formula that results in all 0 or 1 results. 
+##' Use intercept to adjust accordingly. Additionally, coefficient scales don't make sense at the moment. 
 ##' Still need to add the ability to have confounders in place.
 genBinomialDV <- function(df, form, errors, intercept, type = c("binary", "response")){
   if (missing(type)){
@@ -236,4 +250,4 @@ genFactor <- function(n, k, nlevel, rho, seed, keepSeed, ...){
     }
   }
 }
-  # check errors for very large factor levels
+
