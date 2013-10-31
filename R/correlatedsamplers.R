@@ -192,11 +192,31 @@ rweibullcor <- function(x, rho) {
 ##' mean(y) 
 ##' sd(y)  
 rgammacor <- function(x, rho){
-  require(MASS)
   y <- sapply(x, rnormcor, rho=rho)
   y2 <- pnorm(y)
   fit <- fitdistr(y2, densfun="gamma")
   y3 <- sapply(y2, qgamma, shape=fit$estimate[[1]], rate=fit$estimate[[2]])
+}
+
+##' Generate a vector from a negative binomial distribution correlated with another distribution
+##'
+##' Allow user to draw from a negative binomial distribution correlated with a user specified vector
+##' 
+##' @param x variable to draw from
+##' @param rho correlation coefficient between x and result of function
+##' @param scalar a scale factor for the negative binomial draws
+##' @return a vector of the same length as x drawn from a negative binomial distribution correlated with x at the level of rho
+##' @details Rough estimate
+##' @author Jared E. Knowles
+##' @export 
+rnegbinomcor <- function(x, rho, scalar=NULL){
+  if(missing(scalar)){
+    scalar <- 10
+  }
+  y <- sapply(x, rnormcor, rho=rho)
+  y2 <- pnorm(y)
+  fit <- fitdistr(ceiling(y2*scalar), densfun="negative binomial")
+  y3 <- sapply(y2, qnbinom, size=fit$estimate[[1]], mu=fit$estimate[[2]])
 }
 
 ##' Generate a vector from a binomial distribution correlated with another distribution
@@ -205,14 +225,21 @@ rgammacor <- function(x, rho){
 ##' 
 ##' @param x variable to draw from
 ##' @param rho correlation coefficient between x and result of function
-##' @return a vector of the same length as x drawn from a normal distribution correlated with x at the level of rho
+##' @param scalar a scale factor for the binomial draws
+##' @return a vector of the same length as x drawn from a binomial distribution correlated with x at the level of rho
 ##' @details Rough estimate
 ##' @author Jared E. Knowles
 ##' @export 
-rbinomcor <- function(x, rho){
-  require(MASS)
-  y <- sapply(x, rnormcor, rho=rho)
-  y2 <- pnorm(y)
-  pr <- 1/(1+exp(-y2))
-  y <- sapply(pr, qbinom, size=1, prob=abs(rho))
+rbinomcor <- function(x, rho, scalar=NULL){
+  if(missing(scalar)){
+    scalar <- 10
+  }
+  y <- rnegbinomcor(x, rho, scalar)
+  y2 <- y
+  y2[y2 <= mean(y)] <- 0
+  y2[y2 >= mean(y)] <- 1
+  return(y2)
 }
+
+
+## BETA, t, and geom, and regular binomial 
