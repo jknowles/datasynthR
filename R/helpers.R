@@ -4,7 +4,7 @@
 ##' 
 ##' @param x an unordered factor variable
 ##' @param y an unordered factor variable
-##' @param A logical vector indicating whether results should be printed to the console
+##' @param print a logical vector indicating whether results should be printed to the console
 ##' @return A named list with gamma, standard error of gamma, p-value of gamma, and statistical significance
 ##' @note Yadda yadda yadda
 ##' @export

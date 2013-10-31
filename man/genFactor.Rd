@@ -14,6 +14,9 @@
 
   \item{rho}{Level of association among the variables
   created}
+
+  \item{keepSeed}{logical; do you want to return the
+  initializing seed}
 }
 \description{
   Quickly generate random dataframes of unordered factor

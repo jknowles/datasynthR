@@ -23,8 +23,8 @@
 ##' the correct sign, but it will not always result in the correct magnitude. 
 ##' @examples
 ##' dat1 <- genNumeric(1000, 3, rho=0.3)
-##' cor(dat[, 1], dat[, 2])
-##' cor(dat[, 2], dat[, 3])
+##' cor(dat1[, 1], dat1[, 2])
+##' cor(dat1[, 2], dat1[, 3])
 ##' # Specify a pattern
 ##' struc <- list(dist=c("norm", "pois", "unif"), rho=c(0.2, -.5, .5), 
 ##' names=c("super", "cool", "data"))
@@ -122,6 +122,7 @@ genNumeric <- function(n, k, rho, seed, pattern){
 ##' coefficients of those variables
 ##' @param errors The way the error structure of the DGP formula should be established
 ##' @param intercept An adjustment to the base probability
+##' @param type Indicate whether the binary response is desired or the probability
 ##' @return A binomial vector by a formula generated out of the elements of form
 ##' @details Coefficients needs to be long enough to incorporate the factor levels
 ##' @note Yadda yadda yadda
@@ -179,7 +180,7 @@ genFormula <- function(df, vars){
 ##' @param k Number of columns in the resulting dataframe
 ##' @param nlevel Number of levels in the factor variables created
 ##' @param rho Level of association among the variables created
-##' 
+##' @param keepSeed logical; do you want to return the initializing seed 
 ##' @details Rho is used to generate associations between preceding variables in the dataframe. 
 ##' Element 1 and 2 are associated at the level of rho. Element 2 and 3 are also associated at the level of 
 ##' rho. All variables have the same number of levels -- nlevels -- and currently factor level names 

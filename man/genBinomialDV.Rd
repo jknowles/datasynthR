@@ -17,6 +17,9 @@
   formula should be established}
 
   \item{intercept}{An adjustment to the base probability}
+
+  \item{type}{Indicate whether the binary response is
+  desired or the probability}
 }
 \value{
   A binomial vector by a formula generated out of the

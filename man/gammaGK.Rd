@@ -9,8 +9,8 @@
 
   \item{y}{an unordered factor variable}
 
-  \item{A}{logical vector indicating whether results should
-  be printed to the console}
+  \item{print}{a logical vector indicating whether results
+  should be printed to the console}
 }
 \value{
   A named list with gamma, standard error of gamma, p-value

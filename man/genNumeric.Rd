@@ -51,8 +51,8 @@
 }
 \examples{
 dat1 <- genNumeric(1000, 3, rho=0.3)
-cor(dat[, 1], dat[, 2])
-cor(dat[, 2], dat[, 3])
+cor(dat1[, 1], dat1[, 2])
+cor(dat1[, 2], dat1[, 3])
 # Specify a pattern
 struc <- list(dist=c("norm", "pois", "unif"), rho=c(0.2, -.5, .5),
 names=c("super", "cool", "data"))
