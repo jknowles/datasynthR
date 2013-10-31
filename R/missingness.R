@@ -203,6 +203,7 @@ MCARplot <- function(results){
 ##' @export
 ##' @author Jared E. Knowles
 MAR.df <- function(df, vars, probs){
+  "%w/o%" <- function(x, y) x[!x %in% y] #--  x without y
   if(length(probs) == 1){
     probs <- rep(probs, length(vars))
   } else if(length(probs) > 1){

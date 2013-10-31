@@ -167,40 +167,16 @@ mdf3 <- MCAR.df(mdf, p=probs)
 
 aa <- summary.MCARcheck(MCARcheck.df(mdf3), print=FALSE)
 
+tol <- 13
+
 test_that("MAR data is not MCAR", {
   expect_that(aa[[2]], is_less_than(2))
   expect_that(zz[[2]], is_more_than(100))
-  expect_that(dimNA(mdf3)[4], approxto(0.12, tol=0.015))
-  expect_that(dimNA(mdf2)[4], approxto(0.12, tol=0.015))
-  expect_approxto(dimNA(mdf3)[4], 0.12, tol=0.015)
-  expect_approxto(dimNA(mdf2)[4], 0.12, tol=0.015)
-  expect_approxto(dimNA(mdf2)[4], 0.12, tol=0.00015)
-  expect_approxto(dimNA(mdf2)[4], 0.12, tol=1)
+  expect_that(round(dimNA(mdf2)[[4]]*100), is_less_than(13))
+  expect_that(round(dimNA(mdf3)[[4]]*100), is_less_than(13))
+  expect_that(round(dimNA(mdf3)[[4]]*100), is_more_than(10))
+  expect_that(round(dimNA(mdf2)[[4]]*100), is_more_than(10))
 })
 
-context("MNAR")
-
-df <- mdf
-
-
-MAR.df <- function(df, probs){
-  if(length(probs) == 1){
-    probs <- rep(probs, length(vars))
-  } else if(length(probs) > 1){
-    if(length(probs) != length(vars)) stop("Lengths don't match.")
-  }
-  tmpdf <- genNumeric()
-  for(i in 1:length(vars)){
-    myF <- list(vars=sample(names(df) %w/o% vars, 4))
-    myF$coefs <- rnorm(length(genFormula(df, myF$vars)[-1]), mean=0, sd=1)
-    eval(parse(text=paste0("df$out", i, "<- genBinomialDV(df, form=myF, intercept=0, type='response')")))
-  }
-  for(j in 1:ncol(df)){
-    s <- sample(1:length(vars), 1)
-    eval(parse(text=paste0("q <- quantile(df$out",s ," , probs[",s,"], na.rm=T)")))
-    eval(parse(text=paste0("df[,", j, "][df$out", s," < ", q, "] <- NA")))
-  }
-  return(df)
-}
-
+#context("MNAR")
 
