@@ -21,6 +21,13 @@
 \details{
   Rough estimate
 }
+\examples{
+x <- rnorm(1000)
+y <- rgammacor(x, 0.2)
+cor(x,y) # very close to 0.2
+mean(y)
+sd(y)
+}
 \author{
   Jared E. Knowles
 }

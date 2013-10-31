@@ -21,6 +21,13 @@
 \details{
   Rough estimate, biased by known amount for now
 }
+\examples{
+x <- rnorm(1000, 1, 1)
+y <- rnormcorV(x, 0.2)
+cor(x,y) # very close to 0.2
+mean(y) # close to 0
+sd(y)   # close to 1
+}
 \author{
   Jared E. Knowles
 }

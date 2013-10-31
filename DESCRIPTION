@@ -24,4 +24,3 @@ Collate:
     'generators.R'
     'helpers.R'
     'missingness.R'
-    'sketches.R'

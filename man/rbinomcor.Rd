@@ -2,16 +2,18 @@
 \alias{rbinomcor}
 \title{Generate a vector from a binomial distribution correlated with another distribution}
 \usage{
-  rbinomcor(x, rho)
+  rbinomcor(x, rho, scalar = NULL)
 }
 \arguments{
   \item{x}{variable to draw from}
 
   \item{rho}{correlation coefficient between x and result
   of function}
+
+  \item{scalar}{a scale factor for the binomial draws}
 }
 \value{
-  a vector of the same length as x drawn from a normal
+  a vector of the same length as x drawn from a binomial
   distribution correlated with x at the level of rho
 }
 \description{

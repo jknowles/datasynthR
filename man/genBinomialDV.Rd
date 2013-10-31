@@ -33,11 +33,11 @@
 \note{
   Yadda yadda yadda
 
-  Currently it can be easy for the user to build a formulae
+  Currently it can be easy for the user to build a formula
   that results in all 0 or 1 results. Use intercept to
-  adjust accordingly. Additionally, coefficient scaes don't
-  make sense at the moment. Still need to add the ability
-  to have confounders in place.
+  adjust accordingly. Additionally, coefficient scales
+  don't make sense at the moment. Still need to add the
+  ability to have confounders in place.
 }
 \author{
   Jared E. Knowles

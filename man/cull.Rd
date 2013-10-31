@@ -1,10 +1,23 @@
 \name{cull}
 \alias{cull}
-\title{Cut out duplicate values}
+\title{Cut out duplicate values in a dataframe}
 \usage{
   cull(tmpdf)
 }
+\arguments{
+  \item{tmpdf}{a dataframe from which to cull}
+}
+\value{
+  The dataframe with duplciated values culled from it
+}
 \description{
-  Cut out duplicate values
+  Estimate the correlation between two unordered factor
+  variables using the Goodman and Kruskal gamma statistic
+}
+\note{
+  Yadda yadda yadda
+}
+\author{
+  Jared E. Knowles
 }
 

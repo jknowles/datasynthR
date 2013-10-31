@@ -24,6 +24,13 @@
 \note{
   runif only works coming from uniform data
 }
+\examples{
+x <- runif(1000)
+y <- runifcor.cor(x, 0.2)
+cor(x,y) # very close to 0.2
+mean(y)
+sd(y)
+}
 \author{
   Jared E. Knowles
 }
