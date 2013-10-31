@@ -18,7 +18,10 @@ Depends:
     MASS,
     reshape
 Suggests:
-    testthat
+    testthat,
+    ggplot2
+Imports:
+    MASS
 Collate:
     'correlatedsamplers.R'
     'generators.R'

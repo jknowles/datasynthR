@@ -15,6 +15,9 @@
   \item{rho}{Level of association among the variables
   created}
 
+  \item{seed}{Allows an arbitrary seed of length n to be
+  passed to generate starting values}
+
   \item{keepSeed}{logical; do you want to return the
   initializing seed}
 }

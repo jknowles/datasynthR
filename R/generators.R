@@ -180,6 +180,7 @@ genFormula <- function(df, vars){
 ##' @param k Number of columns in the resulting dataframe
 ##' @param nlevel Number of levels in the factor variables created
 ##' @param rho Level of association among the variables created
+##' @param seed Allows an arbitrary seed of length n to be passed to generate starting values
 ##' @param keepSeed logical; do you want to return the initializing seed 
 ##' @details Rho is used to generate associations between preceding variables in the dataframe. 
 ##' Element 1 and 2 are associated at the level of rho. Element 2 and 3 are also associated at the level of 
