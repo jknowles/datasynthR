@@ -6,8 +6,9 @@ Functions to procedurally generate synthetic data in R for testing and collabora
 `datasynthR` allows the user to generate data of known distributional properties with 
 known correlation structures. This is useful for testing statistical model data, building functions to operate on very large datasets, or training others in using R!
 
-`datasynthR` is built around a simple architecture of correlated samplers, dataset 
-generators, and missingness functions. 
+`datasynthR` is built around a simple architecture of correlated samplers, dataset generators, and missingness functions. This work was inspired by a 
+[list-serv](https://stat.ethz.ch/pipermail/r-help/2007-October/142556.html) post by Joris Dewolf detailing how to generate random correlated 
+variables from a normal distribution. 
 
 - *correlated samplers* take a vector V of length n and generate another vector of length n correlated with V at a user specified level of *rho* following the 
 distributional form specified in the sampler
