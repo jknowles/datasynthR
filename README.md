@@ -9,6 +9,14 @@ known correlation structures. This is useful for testing statistical model data,
 `datasynthR` is built around a simple architecture of correlated samplers, dataset 
 generators, and missingness functions. 
 
+- *correlated samplers* take a vector V of length n and generate another vector of length n correlated with V at a user specified level of *rho* following the 
+distributional form specified in the sampler
+- *generators* combine *correlated samplers* together to generate datasets of 
+known structure, with variables of known distributions, with known correlations 
+among them
+- *missingness functions* apply specifc types of missingness to datasets in order 
+to simulate real world data
+
 ## Correlated samplers
 
 These are the workhorse functions of `datasynthR`. These functions allow for the 
