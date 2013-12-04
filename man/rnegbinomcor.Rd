@@ -2,7 +2,7 @@
 \alias{rnegbinomcor}
 \title{Generate a vector from a negative binomial distribution correlated with another distribution}
 \usage{
-  rnegbinomcor(x, rho, scalar = NULL)
+  rnegbinomcor(x, rho, scale = NULL)
 }
 \arguments{
   \item{x}{variable to draw from}
@@ -10,7 +10,7 @@
   \item{rho}{correlation coefficient between x and result
   of function}
 
-  \item{scalar}{a scale factor for the negative binomial
+  \item{scale}{a scale factor for the negative binomial
   draws}
 }
 \value{
