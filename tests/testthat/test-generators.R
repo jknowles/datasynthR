@@ -363,8 +363,8 @@ test_that("Factor levels greater than 26 can be generated", {
   expect_that(md4, is_more_than(tol4))
 })
 
-# 
-# context("Generate formulas")
+
+context("Generate formulas")
 # 
 # set.seed(382)
 # seeds <- genNumeric(10000, 6, rho=0.1)
@@ -381,20 +381,15 @@ test_that("Factor levels greater than 26 can be generated", {
 # 
 # dat1 <- genFactor(10000, 3, nlevel=3, rho=0.8)
 # dat2 <- genFactor(10000, 4, nlevel=4, rho= - 0.1, seed=dat[,6])
-# dat3 <- genFactor(10000, 4, nlevel=6, rho= -0.2, seed=dat2[,4])
-# identical(dat2[,4], dat3[,1])
-# 
+#  
 # names(dat1) <- sample(LETTERS, length(names(dat1)))
 # names(dat2) <- sample(letters, length(names(dat2)))
-# names(dat3) <- sample(paste0(letters,LETTERS), length(names(dat3)))
 # mdf <- cbind(dat, dat1)
 # mdf <- cbind(mdf, dat2)
-# mdf <- cbind(mdf, dat3)
-# #mdf <- mdf[, c(2:6, 12, 16, 19, 11)]
-# 
+#  
 # myF <- list(vars = sample(names(mdf), 7))
-# 
-# genFormula(mdf, myF$vars)
+#  
+# genFormula(mdf, myF$vars[-1])
 # 
 # context("Generate binomial dependent variables")
 # 

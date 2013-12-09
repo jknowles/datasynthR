@@ -84,7 +84,6 @@ rnormcorV <- function(x, rho){
 ##' mean(y) 
 ##' sd(y)   
 rchisqcor <- function(x, rho) {
-  require(MASS)
   y <- sapply(x, rlnormcor, rho=rho)
   y2 <- plnorm(y)
   fit <- fitdistr(y, densfun="chi-squared", list(df=2, ncp=1), 
@@ -204,12 +203,12 @@ rgammacor <- function(x, rho){
 ##' 
 ##' @param x variable to draw from
 ##' @param rho correlation coefficient between x and result of function
-##' @param scalar a scale factor for the negative binomial draws
+##' @param scale a scale factor for the negative binomial draws
 ##' @return a vector of the same length as x drawn from a negative binomial distribution correlated with x at the level of rho
 ##' @details Rough estimate
 ##' @author Jared E. Knowles
 ##' @export 
-rnegbinomcor <- function(x, rho, scalar=NULL){
+rnegbinomcor <- function(x, rho, scale=NULL){
   if(missing(scalar)){
     scalar <- 10
   }
@@ -225,12 +224,12 @@ rnegbinomcor <- function(x, rho, scalar=NULL){
 ##' 
 ##' @param x variable to draw from
 ##' @param rho correlation coefficient between x and result of function
-##' @param scalar a scale factor for the binomial draws
+##' @param scale a scale factor for the binomial draws
 ##' @return a vector of the same length as x drawn from a binomial distribution correlated with x at the level of rho
 ##' @details Rough estimate
 ##' @author Jared E. Knowles
 ##' @export 
-rbinomcor <- function(x, rho, scalar=NULL){
+rbinomcor <- function(x, rho, scale=NULL){
   if(missing(scalar)){
     scalar <- 10
   }
