@@ -166,7 +166,6 @@ runifcor.cor <- function(x, rho){
 ##' mean(y) 
 ##' sd(y)  
 rweibullcor <- function(x, rho) {
-  require(MASS)
   y <- sapply(x, rnormcor, rho=rho)
   y2 <- pnorm(y)
   fit <- try(fitdistr(y2, densfun="weibull"))

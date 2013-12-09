@@ -20,6 +20,9 @@
 
   \item{keepSeed}{logical; do you want to return the
   initializing seed}
+
+  \item{\dots}{Additional arguments to be passed to
+  \code{\link{genNumeric}} behind the scenes}
 }
 \description{
   Quickly generate random dataframes of unordered factor

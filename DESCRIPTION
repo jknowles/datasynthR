@@ -20,8 +20,6 @@ Depends:
 Suggests:
     testthat,
     ggplot2
-Imports:
-    MASS
 Collate:
     'correlatedsamplers.R'
     'generators.R'

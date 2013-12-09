@@ -5,12 +5,12 @@
 ##' @param n Number of rows of data to be generated
 ##' @param k Number of columns to be generated
 ##' @param rho Correlation coefficient between pairs of variables
-##' @param pattern List of attributes for columns of data in the data frame created
 ##' @param seed A vector of numerics length n to be used to generate correlations for other variabes from
+##' @param pattern List of attributes for columns of data in the data frame created
 ##' @return An R data frame of n rows and k columns with distributions specified in \code{\link{pattern}}.
-##' If pattern is not specified then variables are normally distributed with sequential bivariate correlations
+##' If \code{\link{pattern}} is not specified then variables are normally distributed with sequential bivariate correlations
 ##' equal to rho. 
-##' @details pattern allows the user to specify a list with three elements: dist, rho, and name. Each element should be
+##' @details \code{\link{pattern}} allows the user to specify a list with three elements: dist, rho, and name. Each element should be
 ##' length k. Dist currently supports the options for norm (normal), binom (binomial), 
 ##' chisq (Chi-squared), pois (poisson), unif (uniform), weibull (Weibull), 
 ##' and gamma (gamma) distributions. Rho should be a numeric between -1 and 1 representing the 
@@ -182,6 +182,7 @@ genFormula <- function(df, vars){
 ##' @param rho Level of association among the variables created
 ##' @param seed Allows an arbitrary seed of length n to be passed to generate starting values
 ##' @param keepSeed logical; do you want to return the initializing seed 
+##' @param \dots Additional arguments to be passed to \code{\link{genNumeric}} behind the scenes
 ##' @details Rho is used to generate associations between preceding variables in the dataframe. 
 ##' Element 1 and 2 are associated at the level of rho. Element 2 and 3 are also associated at the level of 
 ##' rho. All variables have the same number of levels -- nlevels -- and currently factor level names 

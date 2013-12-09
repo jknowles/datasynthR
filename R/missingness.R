@@ -1,3 +1,5 @@
+utils::globalVariables(c("X1", "X2", "value"))
+utils::globalVariables(c("Var1", "Var2"))
 ##' Assign NAs to a vector randomly
 ##'
 ##' Assign NAs to a vector randomly based on a user specified probability
@@ -137,7 +139,6 @@ MCARcheck.df <- function(df){
 ##' @export
 ##' @author Jared E. Knowles
 summary.MCARcheck <- function(results, p, print){
-  library(reshape)
   m1 <- melt(results$gammas)
   names(m1)[3] <- "gamma"
   m2 <- melt(results$se)
