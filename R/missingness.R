@@ -1,3 +1,5 @@
+utils::globalVariables(c("X1", "X2", "value"))
+utils::globalVariables(c("Var1", "Var2"))
 ##' Assign NAs to a vector randomly
 ##'
 ##' Assign NAs to a vector randomly based on a user specified probability
@@ -70,6 +72,39 @@ vecNAsearch <- function(x){
   return(lNA / l)
 }
 
+##' Count the proportion of Inf values in a vector
+##'
+##' Return the proportion of vector x that are Inf
+##' 
+##' @param x a vector of any class that contains Inf values
+##' @return the proportion of x that are Inf values
+##' @note Yadda yadda yadda
+##' @export
+##' @author Jared E. Knowles
+vecInfSearch <- function(x){
+  l <- length(x)
+  lInf <- length(x[is.finite(x)])
+  return(lInf / l)
+}
+
+##' Identify if any infinite values are present in a vector
+##'
+##' A finite analog of \code{\link{anyNA}} that returns a logical
+##' 
+##' @param x a vector of any class that contains Inf values
+##' @return a logical, TRUE if infinite values are present, and FALSE if not
+##' @note Yadda yadda yadda
+##' @export
+##' @author Jared E. Knowles
+anyInf <- function(x){
+  l <- length(x[!is.finite(x)])
+  if(l > 0){
+    return(TRUE)
+  } else{
+    return(FALSE)
+  }
+}
+
 ##' Are missing values in two vectors correlated?
 ##'
 ##' Return the GK test
@@ -137,7 +172,6 @@ MCARcheck.df <- function(df){
 ##' @export
 ##' @author Jared E. Knowles
 summary.MCARcheck <- function(results, p, print){
-  library(reshape)
   m1 <- melt(results$gammas)
   names(m1)[3] <- "gamma"
   m2 <- melt(results$se)
