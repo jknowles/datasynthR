@@ -1,5 +1,7 @@
 datasynthR
 ==========
+[![Build Status](https://travis-ci.org/jknowles/datasynthR.png?branch=master)](https://travis-ci.org/jknowles/datasynthR)
+
 
 Functions to procedurally generate synthetic data in R for testing and collaboration.
 
