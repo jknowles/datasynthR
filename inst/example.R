@@ -26,7 +26,7 @@ cor(studat[, 1], studat[, 8])
 myF <- list(vars=c("test1", "test2", "daysattended", "daysOUT", "bad"), 
                 coefs=c(4, -2, 1.2, -7, 2))
 
-studat$out <- genBinomialDV(studat, form=myF, intercept=300)
+studat$out <- genBinomialDV(studat, form=myF, intercept=-1)
 
 testGLM <- glm(out ~ test1 + test2 + daysattended + daysOUT, data=studat, 
                family="binomial")
@@ -37,6 +37,8 @@ testGLM2 <- glm(out ~ test1 + test2 + daysattended + daysOUT + bad, data=studat,
                family="binomial")
 
 summary(testGLM2)
+
+plot(testGLM2)
 
 ##################
 # What about factor variables?
@@ -100,11 +102,11 @@ genFormula(mdf, myF$vars)
 
 myF$coefs <- rnorm(length(genFormula(mdf, myF$vars)[-1]))
 
-mdf$out <- genBinomialDV(mdf, form=myF, intercept=-50)
+mdf$out <- genBinomialDV(mdf, form=myF, intercept=-5)
 table(mdf$out)
 
 mod1 <- glm(out ~ ., data=mdf, family="binomial")
-mod2 <- glm(out ~ noise + c + test1 + out + aA, data=mdf, 
+mod2 <- glm(out ~ noise + O + test1 + daysOUT + kK, data=mdf, 
             family="binomial")
 
 

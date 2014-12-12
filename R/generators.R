@@ -137,6 +137,11 @@ genBinomialDV <- function(df, form, errors, intercept, type = c("binary", "respo
   } else {
     type <- match.arg(type)
   }
+  if(missing(errors)){
+    errors <- "low"
+  } else {
+    errors <- match.arg(errors)
+  }
   range01 <- function(x){(x-min(x))/(max(x)-min(x))}
   exp <- paste0(form$coefs, "*","mod$", genFormula(df, form$vars)[-1], collapse=" + ")
   form$exp <- parse(text=exp)
@@ -145,7 +150,12 @@ genBinomialDV <- function(df, form, errors, intercept, type = c("binary", "respo
   mod$z <- intercept + eval(form$exp) + runif(dim(mod)[1])
   mod$pr <- 1/(1+exp(-mod$z))
   mod$pr <- range01(scale(mod$pr, center=TRUE))
-  mod$y <- rbinom(dim(mod)[1], 1, mod$pr)
+  if(errors == "low"){
+    mod$y <- rbinom(dim(mod)[1], 1, mod$pr)
+  } else {
+    mod$y <- rbinom(dim(mod)[1], 1, plnorm(mod$pr + runif(length(mod$pr))^2))
+  }
+  
   if(type=="binary"){
     return(mod$y)
   } else if(type=="response"){
