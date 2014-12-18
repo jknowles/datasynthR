@@ -1,7 +1,7 @@
 library(testthat)
 library(datasynthR)
 
-test_package("datasynthR")
+test_check("datasynthR")
 
 # source("inst/tests/test-pkgs.R")
 # source("R/correlatedsamplers.R")

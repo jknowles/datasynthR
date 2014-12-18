@@ -36,3 +36,6 @@ y <- genBinomialDV(dat, form=modterms, intercept=10)
 dat <- cbind(y, dat)
 table(dat$y)
 
+
+
+
