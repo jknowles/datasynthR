@@ -2,6 +2,8 @@
 # Test missingness
 ################################################################################
 
+set.seed(53242)
+
 context("vector NA search")
 
 test1 <- c(rnorm(100), rep(NA, 28))

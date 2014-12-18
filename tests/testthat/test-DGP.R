@@ -1,6 +1,7 @@
 ################################################################################
 # Test data generating process
 
+set.seed(3240)
 
 context("Binomial GLM")
 

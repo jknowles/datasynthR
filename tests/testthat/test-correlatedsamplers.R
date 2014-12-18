@@ -14,6 +14,8 @@
 
 context("Correlations starting with a normally distributed variable")
 
+set.seed(347829)
+
 RHO1 <- 0.7
 RHO2 <- -0.7
 RHO3 <- 0.01
@@ -65,14 +67,14 @@ test_that("Direction is correct", {
 
 context("Chi-square")
 
-a <- rnorm(1000)
+a <- rnorm(5000)
 RHO1 <- 0.7
 RHO2 <- -0.7
 RHO3 <- 0.01
 b <- rchisqcor(a, RHO1)
 c <- rchisqcor(a, RHO2)
 d <- rchisqcor(a, RHO3)
-tol <- .1
+tol <- .08
 
 test_that("Correlation of chi-square is correct", {
   expect_that(abs(cor(a,b) - RHO1), is_less_than(tol))
@@ -88,6 +90,7 @@ test_that("Direction is correct", {
 
 
 context("Poisson")
+
 
 a <- rnorm(5000)
 RHO1 <- 0.7

@@ -2,6 +2,7 @@
 # Test generators
 ################################################################################
 
+set.seed(5324)
 context("Simple Random Correlation Matrices")
 
 
