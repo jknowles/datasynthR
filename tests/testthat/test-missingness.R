@@ -50,7 +50,7 @@ e <- N * P
 a2 <- abs(e - a) / N
 
 test_that("Function is fast and accurate", {
-  expect_that(MCARx(x,P), takes_less_than(.02))
+  expect_that(MCARx(x, P), takes_less_than(.2))
   expect_that(a2, is_less_than(t))
 })
 
