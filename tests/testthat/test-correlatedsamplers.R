@@ -115,8 +115,9 @@ test_that("Direction is correct", {
 })
 
 test_that("Result is poisson distributed", {
-  expect_equivalent(mean(b), sd(b))
-  
+  expect_equal(mean(b), sd(b), tol = 0.4)
+  expect_equal(mean(c), sd(c), tol = 0.4)
+  expect_equal(mean(d), sd(d), tol = 0.4)
 })
 
 context("Uniform")
