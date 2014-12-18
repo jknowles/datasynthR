@@ -14,7 +14,7 @@ gdf <- as.data.frame(gdf)
 nvars <- 3
 modterms <- list(coefs = runif(nvars, min=-1, max=1), vars = sample(names(gdf), nvars)) 
  
-y <- genBinomiaDV(gdf, form=modterms, intercept=0)
+y <- genBinomialDV(gdf, form=modterms, intercept=0)
 gdf <- cbind(y, gdf)
 
 
