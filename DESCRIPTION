@@ -25,3 +25,4 @@ Collate:
     'generators.R'
     'helpers.R'
     'missingness.R'
+RoxygenNote: 5.0.1
