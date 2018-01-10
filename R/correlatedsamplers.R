@@ -169,7 +169,7 @@ runifcor.cor <- function(x, rho){
     tmp <- (3-sqrt(1+8*abs(r)))/4 
     return(tmp * sign(r))
   } 
-  y <- (x*sign(rho) + runif(1000,-hw(abs(rho)),hw(rho*sign(rho)))) %% 1 
+  y <- (x*sign(rho) + runif(length(x),-hw(abs(rho)),hw(rho*sign(rho)))) %% 1 
   return(y)
 }
 
