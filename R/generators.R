@@ -109,7 +109,7 @@ genNumeric <- function(n, k, rho, seed, pattern, ...){
                                unif = runifcor.cor(pattern$seed[,i], rho=pattern$rho[i]),
                                weibull= rweibullcor(pattern$seed[,i], rho=pattern$rho[i],, ...), 
                                gamma = rgammacor(pattern$seed[,i], rho=pattern$rho[i], ...), 
-                               negbinom = rnegbinom(pattern$seed[, i], rho = pattern$rho[i], ...))
+                               negbinom = rnegbinomcor(pattern$seed[, i], rho = pattern$rho[i], ...))
         }
       }
       if(!is.null(pattern$names)){
